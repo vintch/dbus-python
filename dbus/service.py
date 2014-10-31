@@ -23,7 +23,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-__all__ = ('BusName', 'Object', 'method', 'signal')
+__all__ = ('BusName', 'Object', 'FallbackObject', 'method', 'signal')
 __docformat__ = 'restructuredtext'
 
 import sys
