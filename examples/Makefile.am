@@ -4,5 +4,8 @@ EXTRA_DIST = \
 	     example-service.py \
 	     example-signal-emitter.py \
 	     example-signal-recipient.py \
-	     list-system-services.py
-# miss out the gconf examples for now - they don't work
+	     gconf-proxy-client.py \
+	     gconf-proxy-service2.py \
+	     list-system-services.py \
+	     unix-fd-client.py \
+	     unix-fd-service.py
