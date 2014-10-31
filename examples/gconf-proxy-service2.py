@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-print "WARNING: this hasn't been updated to current API yet, and might not work"
-#FIXME: doesn't work with the new bindings
 
 # Copyright (C) 2004-2006 Red Hat Inc. <http://www.redhat.com/>
 # Copyright (C) 2005-2007 Collabora Ltd. <http://www.collabora.co.uk/>
@@ -26,36 +24,39 @@ print "WARNING: this hasn't been updated to current API yet, and might not work"
 # DEALINGS IN THE SOFTWARE.
 
 import dbus
+import dbus.mainloop.glib
+import dbus.service
 
 import gobject
 import gconf
 
-class GConfService(dbus.Service):
+dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
+# there is a real service called "org.gnome.GConf"; don't collide with it.
+name = dbus.service.BusName("org.gnome.GConf.Example", dbus.SessionBus())
+
+class GConfObject(dbus.service.FallbackObject):
     def __init__(self):
-        dbus.Service.__init__(self, "org.gnome.GConf", dbus.SessionBus())
+        dbus.service.FallbackObject.__init__(self, dbus.SessionBus(), '/org/gnome/GConf')
+        self.client = gconf.client_get_default()
 
-        gconf_object_tree = self.GConfObjectTree(self)
-        
-    class GConfObjectTree(dbus.ObjectTree):
-        def __init__(self, service):
-            dbus.ObjectTree.__init__(self, "/org/gnome/GConf", service)
+    @dbus.service.method("org.gnome.GConf", in_signature='', out_signature='s', rel_path_keyword='object_path')
+    def getString(self, object_path):
+        return self.client.get_string(object_path)
 
-            self.client = gconf.client_get_default()
+    @dbus.service.method("org.gnome.GConf", in_signature='s', out_signature='', rel_path_keyword='object_path')
+    def setString(self, value, object_path):
+        self.client.set_string(object_path, value)
 
-        def object_method_called(self, message, object_path, method_name, argument_list):
-            print ("Method %s called on GConf key %s" % (method_name, object_path))
+    @dbus.service.method("org.gnome.GConf", in_signature='', out_signature='i', rel_path_keyword='object_path')
+    def getInt(self, object_path):
+        return self.client.get_int(object_path)
 
-            if "getString" == method_name:
-                return self.client.get_string(object_path)
-            elif "setString" == method_name:
-                self.client.set_int(object_path, argument_list[0])
-            elif "getInt" == method_name:
-                return self.client.get_int(object_path)                
-            elif "setInt" == method_name:
-                self.client.set_int(object_path, argument_list[0])
+    @dbus.service.method("org.gnome.GConf", in_signature='i', out_signature='', rel_path_keyword='object_path')
+    def setInt(self, value, object_path):
+        self.client.set_int(object_path, value)
 
-gconf_service = GConfService()
+gconf_service = GConfObject()
 
 print ("GConf Proxy service started.")
 print ("Run 'gconf-proxy-client.py' to fetch a GConf key through the proxy...")

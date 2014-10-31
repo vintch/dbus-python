@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-print "WARNING: this hasn't been updated to current API yet, and might not work"
-
 # Copyright (C) 2004-2006 Red Hat Inc. <http://www.redhat.com/>
 # Copyright (C) 2005-2007 Collabora Ltd. <http://www.collabora.co.uk/>
 #
@@ -30,8 +28,7 @@ import dbus
 gconf_key = "/desktop/gnome/file_views/icon_theme"
 
 bus = dbus.SessionBus()
-gconf_service = bus.get_service("org.gnome.GConf")
-gconf_key_object = gconf_service.get_object("/org/gnome/GConf" + gconf_key, "org.gnome.GConf")
+gconf_key_object = dbus.Interface(bus.get_object("org.gnome.GConf.Example", "/org/gnome/GConf" + gconf_key), "org.gnome.GConf")
 
 value = gconf_key_object.getString()
 
