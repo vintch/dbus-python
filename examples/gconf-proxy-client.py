@@ -28,7 +28,7 @@ import dbus
 gconf_key = "/desktop/gnome/file_views/icon_theme"
 
 bus = dbus.SessionBus()
-gconf_key_object = dbus.Interface(bus.get_object("org.gnome.GConf.Example", "/org/gnome/GConf" + gconf_key), "org.gnome.GConf")
+gconf_key_object = dbus.Interface(bus.get_object("com.example.GConfProxy", "/org/gnome/GConf" + gconf_key), "org.gnome.GConf")
 
 value = gconf_key_object.getString()
 

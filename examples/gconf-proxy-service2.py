@@ -33,7 +33,7 @@ import gconf
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 # there is a real service called "org.gnome.GConf"; don't collide with it.
-name = dbus.service.BusName("org.gnome.GConf.Example", dbus.SessionBus())
+name = dbus.service.BusName("com.example.GConfProxy", dbus.SessionBus())
 
 class GConfObject(dbus.service.FallbackObject):
     def __init__(self):
