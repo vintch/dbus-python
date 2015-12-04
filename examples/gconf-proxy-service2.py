@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+# Example of implementing an entire subtree of objects using
+# a FallbackObject.
+#
+# This is not a particularly realistic example of real-world code any more,
+# because GConf now uses D-Bus internally itself, and is deprecated;
+# but it's a valid example of a FallbackObject.
+
 # Copyright (C) 2004-2006 Red Hat Inc. <http://www.redhat.com/>
 # Copyright (C) 2005-2007 Collabora Ltd. <http://www.collabora.co.uk/>
 #
