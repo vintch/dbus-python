@@ -4,10 +4,21 @@ dnl function also defines PYTHON_INCLUDES
 AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 
-AC_PATH_PROGS([PYTHON_CONFIG], [python${PYTHON_VERSION}-config python-config], [no])
-if test "${PYTHON_CONFIG}" = "no"; then
-  AC_MSG_ERROR([cannot find python${PYTHON_VERSION}-config or python-config in PATH])
-fi
+AC_ARG_VAR([PYTHON_CONFIG], [python-config executable])
+AS_IF(
+  [test "${PYTHON_CONFIG+set}" = set],
+    [AC_MSG_NOTICE([PYTHON_CONFIG overridden to: $PYTHON_CONFIG])],
+  [test -x "${PYTHON}-config"],
+    [
+      PYTHON_CONFIG="${PYTHON}-config"
+      AC_MSG_NOTICE([Using \$PYTHON-config: $PYTHON_CONFIG])
+    ],
+  dnl else
+    [
+      AC_PATH_PROGS([PYTHON_CONFIG], [python${PYTHON_VERSION}-config python-config], [no])
+      AS_IF([test "${PYTHON_CONFIG}" = "no"],
+        [AC_MSG_ERROR([cannot find python${PYTHON_VERSION}-config or python-config in PATH])])
+    ])
 
 AC_ARG_VAR([PYTHON_INCLUDES], [CPPFLAGS for Python, overriding output of python2.x-config --includes, e.g. "-I/opt/misc/include/python2.7"])
 
