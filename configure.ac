@@ -114,32 +114,39 @@ if test "$enable_api_docs" != no || test "$enable_html_docs" != no; then
   fi
 fi
 
-if test "${enable_api_docs}" != no; then
+AS_IF([test "${enable_api_docs}" != no],
+  [
   AC_PATH_PROG([EPYDOC], [epydoc])
+  AM_CHECK_PYMOD([epydoc], [__version__], [have_epydoc_module=yes], [have_epydoc_module=no])
   AC_MSG_CHECKING([epydoc 3])
-  if test -n "$EPYDOC"; then
+  AS_IF([test -n "$EPYDOC" && test "$have_epydoc_module" = yes],
+    [
     EPYDOC_VERSION=`$EPYDOC --version`
-    case "$EPYDOC_VERSION" in
-      *ersion?3*)
+    AS_CASE(["$EPYDOC_VERSION"],
+      [*ersion?3*],
+        [
         AC_MSG_RESULT([yes, $EPYDOC_VERSION])
-        ;;
-      *)
+        ],
+      [*],
+        [
         AC_MSG_RESULT([no, $EPYDOC_VERSION])
         EPYDOC=
-        ;;
-    esac
-  fi
-  if test -z "$EPYDOC"; then
-    case "$enable_api_docs" in
-      if*possible)
-        enable_api_docs=no
-        ;;
-      *)
-        AC_MSG_ERROR([cannot compile API documentation without epydoc 3.0beta1 or newer installed])
-        ;;
-    esac
-  fi
-fi
+        ],
+      )
+    ],
+    [
+    EPYDOC=
+    ])
+  AS_IF([test -z "$EPYDOC"],
+    [
+    AS_CASE(["$enable_api_docs"],
+      [if*possible],
+        [enable_api_docs=no],
+      [*],
+        [AC_MSG_ERROR([cannot compile API documentation without epydoc 3.0beta1 or newer installed])],
+    )
+    ])
+])
 
 RST2HTMLFLAGS=
 if test "${enable_html_docs}" != no; then
