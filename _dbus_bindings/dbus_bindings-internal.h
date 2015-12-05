@@ -33,6 +33,19 @@
 #define INSIDE_DBUS_PYTHON_BINDINGS
 #include "dbus-python.h"
 
+#if defined(__GNUC__)
+#   if __GNUC__ >= 3
+#       define UNUSED __attribute__((__unused__))
+#       define NORETURN __attribute__((__noreturn__))
+#   else
+#       define UNUSED /*nothing*/
+#       define NORETURN /*nothing*/
+#   endif
+#else
+#   define UNUSED /*nothing*/
+#   define NORETURN /*nothing*/
+#endif
+
 /* no need for extern "C", this is only for internal use */
 
 /* on/off switch for debugging support (see below) */
@@ -219,7 +232,7 @@ dbus_bool_t dbus_py_validate_object_path(const char *path);
 #define dbus_py_validate_error_name dbus_py_validate_interface_name
 
 /* debugging support */
-void _dbus_py_assertion_failed(const char *);
+void _dbus_py_assertion_failed(const char *) NORETURN;
 #define DBUS_PY_RAISE_VIA_NULL_IF_FAIL(assertion) \
     do { if (!(assertion)) { \
             _dbus_py_assertion_failed(#assertion); \
@@ -278,15 +291,5 @@ void _dbus_py_dbg_dump_message(DBusMessage *);
 /* General-purpose Python glue */
 
 #define DEFERRED_ADDRESS(ADDR) 0
-
-#if defined(__GNUC__)
-#   if __GNUC__ >= 3
-#       define UNUSED __attribute__((__unused__))
-#   else
-#       define UNUSED /*nothing*/
-#   endif
-#else
-#   define UNUSED /*nothing*/
-#endif
 
 #endif
