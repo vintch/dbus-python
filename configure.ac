@@ -172,27 +172,25 @@ AM_CONDITIONAL([ENABLE_DOCS], [test "$enable_html_docs" != no])
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.6])
 PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.70])
 
-TP_COMPILER_WARNINGS([CFLAGS_WARNINGS], [test] dbus_python_released [= 0],
-  [all \
-   extra \
-   declaration-after-statement \
-   deprecated-declarations \
-   shadow \
-   strict-prototypes \
-   missing-prototypes \
-   missing-declarations \
-   sign-compare \
-   nested-externs \
-   pointer-arith \
-   format-security \
-   init-self],
-  [missing-field-initializers \
-   unused-parameter])
-
-JH_ADD_CFLAG([-std=c9x])
-JH_ADD_CFLAG([-fno-strict-aliasing])
-
-CFLAGS="$CFLAGS $CFLAGS_WARNINGS"
+AX_COMPILER_FLAGS([WARN_CFLAGS],
+  [WARN_LDFLAGS],
+  [ifelse(dbus_python_released, [1], [yes], [no])],
+  dnl unfortunately the Python headers fail various checks included in
+  dnl AX_COMPILER_FLAGS, and are not const-correct for strings
+  [ \
+   -Wdeprecated-declarations \
+   -Wno-redundant-decls \
+   -Wno-switch-default \
+   -Wno-write-strings \
+   -std=c9x \
+  ])
+dnl AX_COMPILER_FLAGS doesn't order the compiler flags correctly to be able
+dnl to disable flags that it would normally enable
+WARN_CFLAGS="$(echo "${WARN_CFLAGS}" | ${SED} \
+  -e s/-Wredundant-decls// \
+  -e s/-Wswitch-default// \
+  -e s/-Wwrite-strings// \
+  )"
 
 ifelse(dbus_python_released, 1,
     [ # version x.y.z - disable coding style checks by default

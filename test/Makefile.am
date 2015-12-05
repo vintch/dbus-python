@@ -26,12 +26,24 @@ pyexec_LTLIBRARIES = dbus_py_test.la
 install:
 	@echo "Not installing anything from test/"
 
-dbus_py_test_la_CPPFLAGS = -I$(top_srcdir)/include $(DBUS_CFLAGS) \
-			   $(PYTHON_INCLUDES)
-dbus_py_test_la_LDFLAGS = -module -avoid-version \
-			  $(DBUS_LIBS)
-dbus_py_test_la_SOURCES = dbus_py_test.c \
-			  $(top_srcdir)/include/dbus-python.h
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/include \
+	$(DBUS_CFLAGS) \
+	$(PYTHON_INCLUDES) \
+	$(NULL)
+AM_CFLAGS = \
+	$(WARN_CFLAGS) \
+	$(NULL)
+AM_LDFLAGS = \
+	-module \
+	-avoid-version \
+	$(WARN_LDFLAGS) \
+	$(NULL)
+
+dbus_py_test_la_LIBADD = $(DBUS_LIBS)
+dbus_py_test_la_SOURCES = \
+	dbus_py_test.c \
+	$(top_srcdir)/include/dbus-python.h
 
 AM_TESTS_ENVIRONMENT = \
 	export DBUS_TOP_SRCDIR="$(abs_top_srcdir)"; \
@@ -47,7 +59,7 @@ check_PROGRAMS = test-import-repeatedly
 
 test_import_repeatedly_SOURCES = import-repeatedly.c
 test_import_repeatedly_CPPFLAGS = $(PYTHON_INCLUDES)
-test_import_repeatedly_LDFLAGS = $(PYTHON_LIBS)
+test_import_repeatedly_LDADD = $(PYTHON_LIBS)
 
 cross-test-server:
 	$(AM_TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-server.py

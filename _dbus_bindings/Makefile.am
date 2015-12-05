@@ -1,9 +1,18 @@
 pyexec_LTLIBRARIES = _dbus_bindings.la
 
-AM_CPPFLAGS = -I$(top_srcdir)/include $(DBUS_CFLAGS) $(PYTHON_INCLUDES)
-AM_LDFLAGS = -module -avoid-version \
-	     -export-symbols-regex \(PyInit__\|init_\)dbus_bindings \
-	     $(NULL)
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/include \
+	$(DBUS_CFLAGS) \
+	$(PYTHON_INCLUDES) \
+	$(NULL)
+AM_CFLAGS = \
+	$(WARN_CFLAGS) \
+	$(NULL)
+AM_LDFLAGS = \
+	-module -avoid-version \
+	-export-symbols-regex \(PyInit__\|init_\)dbus_bindings \
+	$(WARN_LDFLAGS) \
+	$(NULL)
 
 libadd = $(DBUS_LIBS)
 
