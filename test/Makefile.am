@@ -33,11 +33,13 @@ dbus_py_test_la_LDFLAGS = -module -avoid-version \
 dbus_py_test_la_SOURCES = dbus_py_test.c \
 			  $(top_srcdir)/include/dbus-python.h
 
-TESTS_ENVIRONMENT = DBUS_TOP_SRCDIR="$(abs_top_srcdir)" \
-		    DBUS_TOP_BUILDDIR="$(abs_top_builddir)" \
-		    DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)' \
-		    PYTHONPATH="$(abs_top_builddir)/test/.libs:$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/_dbus_bindings/.libs:$(abs_top_builddir)/_dbus_glib_bindings/.libs" \
-		    PYTHON='$(PYTHON)'
+AM_TESTS_ENVIRONMENT = \
+	export DBUS_TOP_SRCDIR="$(abs_top_srcdir)"; \
+	export DBUS_TOP_BUILDDIR="$(abs_top_builddir)"; \
+	export DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)'; \
+	export PYTHONPATH="$(abs_top_builddir)/test/.libs:$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/_dbus_bindings/.libs:$(abs_top_builddir)/_dbus_glib_bindings/.libs"; \
+	export PYTHON='$(PYTHON)'; \
+	$(NULL)
 
 TESTS = run-test.sh test-import-repeatedly
 
@@ -48,8 +50,8 @@ test_import_repeatedly_CPPFLAGS = $(PYTHON_INCLUDES)
 test_import_repeatedly_LDFLAGS = $(PYTHON_LIBS)
 
 cross-test-server:
-	$(TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-server.py
+	$(AM_TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-server.py
 cross-test-client:
-	$(TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-client.py
+	$(AM_TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-client.py
 
 .PHONY: cross-test-compile cross-test-server cross-test-client

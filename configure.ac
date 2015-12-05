@@ -31,7 +31,7 @@ AC_SUBST(DBUS_PYTHON_MICRO_VERSION, dbus_python_micro_version)
 AC_CONFIG_SRCDIR([_dbus_bindings/module.c])
 AC_CONFIG_HEADERS(config.h)
 
-AM_INIT_AUTOMAKE([1.9 -Wno-portability])
+AM_INIT_AUTOMAKE([1.13 -Wno-portability subdir-objects tar-ustar])
 
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
