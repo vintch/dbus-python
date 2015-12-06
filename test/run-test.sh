@@ -23,44 +23,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-export DBUS_FATAL_WARNINGS=1
-ulimit -c unlimited
-
+failed=
 skipped=
-
-function die() 
-{
-    if ! test -z "$DBUS_SESSION_BUS_PID" ; then
-        echo "killing message bus $DBUS_SESSION_BUS_PID" >&2
-        kill -9 "$DBUS_SESSION_BUS_PID"
-    fi
-    echo "$SCRIPTNAME: $*" >&2
-    exit 1
-}
-
-if test -z "$PYTHON"; then
-    echo "Warning: \$PYTHON not set, assuming 'python'" >&2
-    export PYTHON=python
-fi
-
-if test -z "$DBUS_TOP_SRCDIR" ; then
-    die "Must set DBUS_TOP_SRCDIR"
-fi
-
-if test -z "$DBUS_TOP_BUILDDIR" ; then
-    die "Must set DBUS_TOP_BUILDDIR"
-fi
-
-SCRIPTNAME=$0
-
-## so the tests can complain if you fail to use the script to launch them
-export DBUS_TEST_PYTHON_RUN_TEST_SCRIPT=1
-# Rerun ourselves with tmp session bus if we're not already
-if test -z "$DBUS_TEST_PYTHON_IN_RUN_TEST"; then
-  DBUS_TEST_PYTHON_IN_RUN_TEST=1
-  export DBUS_TEST_PYTHON_IN_RUN_TEST
-  exec "$DBUS_TOP_SRCDIR"/test/run-with-tmp-session-bus.sh $SCRIPTNAME
-fi  
 
 dbus-monitor > "$DBUS_TOP_BUILDDIR"/test/monitor.log &
 
@@ -68,18 +32,6 @@ echo "DBUS_TOP_SRCDIR=$DBUS_TOP_SRCDIR"
 echo "DBUS_TOP_BUILDDIR=$DBUS_TOP_BUILDDIR"
 echo "PYTHONPATH=$PYTHONPATH"
 echo "PYTHON=$PYTHON"
-
-# the exceptions handling test is version specific
-PYMAJOR=$($PYTHON -c 'import sys;print(sys.version_info[0])')
-PYTEST=test-exception-py$PYMAJOR.py
-echo "running $PYTEST"
-$PYTHON "$DBUS_TOP_SRCDIR"/test/$PYTEST || die "$PYTEST failed"
-
-echo "running test-standalone.py"
-$PYTHON "$DBUS_TOP_SRCDIR"/test/test-standalone.py || die "test-standalone.py failed"
-
-echo "running test-unusable-main-loop.py"
-$PYTHON "$DBUS_TOP_SRCDIR"/test/test-unusable-main-loop.py || die "... failed"
 
 #echo "running the examples"
 
@@ -96,59 +48,61 @@ $PYTHON "$DBUS_TOP_SRCDIR"/test/test-unusable-main-loop.py || die "... failed"
 
 echo "running cross-test (for better diagnostics use mjj29's dbus-test)"
 
-$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-server.py > "$DBUS_TOP_BUILDDIR"/test/cross-server.log&
+$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-server.py > "$DBUS_TOP_BUILDDIR"/test/cross-server.log &
 sleep 1
 $PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-client.py > "$DBUS_TOP_BUILDDIR"/test/cross-client.log
 e=$?
+echo "test-client exit status: $e"
 
 if test $e = 77; then
-  :     # skipped
+  echo "cross-test-client exited $e, marking as skipped"
+  skipped=yes
 elif grep . "$DBUS_TOP_BUILDDIR"/test/cross-client.log >/dev/null; then
-  :     # OK
+  echo "OK, cross-test-client produced some output"
 else
-  die "cross-test client produced no output"
+  echo "cross-test-client produced no output" >&2
+  failed=yes
 fi
 
 if test $e = 77; then
-  :     # skipped
+  echo "test-client exited $e, marking as skipped"
+  skipped=yes
 elif grep . "$DBUS_TOP_BUILDDIR"/test/cross-server.log >/dev/null; then
-  :     # OK
+  echo "OK, cross-test-server produced some output"
 else
-  die "cross-test server produced no output"
+  echo "cross-test-server produced no output" >&2
+  failed=yes
 fi
 
 if grep fail "$DBUS_TOP_BUILDDIR"/test/cross-client.log; then
-  die "^^^ Cross-test client reports failures, see test/cross-client.log"
+  failed=yes
 else
   echo "  - cross-test client reported no failures"
 fi
+
 if grep untested "$DBUS_TOP_BUILDDIR"/test/cross-server.log; then
-  die "^^^ Cross-test server reports incomplete test coverage"
+  failed=yes
 else
   echo "  - cross-test server reported no untested functions"
 fi
 
-for script in test-client.py test-signals.py test-p2p.py; do
-    echo "running ${script}"
-    $PYTHON "$DBUS_TOP_SRCDIR"/test/${script}
-    e=$?
-    case "$e" in
-      (77)
-        echo "SKIP: ${script} not run, dependencies missing?"
-        skipped=1
-        ;;
-      (0)
-        echo "PASS: ${script}"
-        ;;
-      (*)
-        die "${script} failed"
-    esac
-done
+echo "==== client log ===="
+cat "$DBUS_TOP_BUILDDIR"/test/cross-client.log
+echo "==== end ===="
+
+echo "==== server log ===="
+cat "$DBUS_TOP_BUILDDIR"/test/cross-server.log
+echo "==== end ===="
 
 rm -f "$DBUS_TOP_BUILDDIR"/test/test-service.log
 rm -f "$DBUS_TOP_BUILDDIR"/test/cross-client.log
 rm -f "$DBUS_TOP_BUILDDIR"/test/cross-server.log
 rm -f "$DBUS_TOP_BUILDDIR"/test/monitor.log
 
-if test -n $skipped; then exit 77; fi
+if test -n "$skipped"; then
+  exit 77
+fi
+if test -n "$failed"; then
+  exit 1
+fi
 exit 0

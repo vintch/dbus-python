@@ -148,6 +148,11 @@ AS_IF([test "${enable_api_docs}" != no],
     ])
 ])
 
+AC_ARG_VAR([DBUS_RUN_SESSION],
+  [The dbus-run-session tool from dbus 1.8 or later])
+AC_PATH_PROG([DBUS_RUN_SESSION], [dbus-run-session], [false])
+AM_CONDITIONAL([HAVE_DBUS_RUN_SESSION], [test "$DBUS_RUN_SESSION" != false])
+
 RST2HTMLFLAGS=
 if test "${enable_html_docs}" != no; then
   AC_CHECK_PROGS([RST2HTML], [rst2html rst2html.py], [])

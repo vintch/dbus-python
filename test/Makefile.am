@@ -6,7 +6,6 @@ EXTRA_DIST = \
 	     cross-test-server.py \
 	     crosstest.py \
 	     run-test.sh \
-	     run-with-tmp-session-bus.sh \
 	     test-client.py \
 	     test-exception-py2.py \
 	     test-exception-py3.py \
@@ -16,7 +15,9 @@ EXTRA_DIST = \
 	     test-standalone.py \
 	     test-unusable-main-loop.py \
 	     TestSuitePythonService.service.in \
-	     tmp-session-bus.conf.in
+	     tmp-session-bus.conf.in \
+	     with-session-bus.sh \
+	     $(NULL)
 
 # If you try to make this noinst, libtool helpfully gives us a static
 # library, which doesn't work as a Python extension: so force the install
@@ -51,9 +52,40 @@ AM_TESTS_ENVIRONMENT = \
 	export DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)'; \
 	export PYTHONPATH="$(abs_top_builddir)/test/.libs:$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/_dbus_bindings/.libs:$(abs_top_builddir)/_dbus_glib_bindings/.libs"; \
 	export PYTHON='$(PYTHON)'; \
+	export DBUS_FATAL_WARNINGS=1; \
 	$(NULL)
 
-TESTS = run-test.sh test-import-repeatedly
+TEST_EXTENSIONS = .sh .py
+
+if HAVE_DBUS_RUN_SESSION
+LOG_COMPILER = $(DBUS_RUN_SESSION) \
+	--config-file=tmp-session-bus.conf \
+	--
+else
+LOG_COMPILER = \
+	$(top_srcdir)/test/with-session-bus.sh \
+	--config-file=tmp-session-bus.conf \
+	--
+endif
+
+SH_LOG_COMPILER = $(LOG_COMPILER) $(SHELL)
+PY_LOG_COMPILER = $(LOG_COMPILER) $(PYTHON)
+
+TESTS = \
+	run-test.sh \
+	test-client.py \
+	test-import-repeatedly \
+	test-p2p.py \
+	test-signals.py \
+	test-standalone.py \
+	test-unusable-main-loop.py \
+	$(NULL)
+
+if HAVE_PYTHON_3
+TESTS += test-exception-py3.py
+else
+TESTS += test-exception-py2.py
+endif
 
 check_PROGRAMS = test-import-repeatedly
 
