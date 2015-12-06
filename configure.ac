@@ -20,6 +20,7 @@ AC_INIT(dbus-python, dbus_python_version,
         [http://bugs.freedesktop.org/enter_bug.cgi?product=dbus&component=python])
 AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
+AC_CONFIG_AUX_DIR([build-aux])
 
 AC_DEFINE(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version, [dbus-python major version])
 AC_SUBST(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version)
