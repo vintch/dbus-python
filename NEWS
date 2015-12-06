@@ -1,7 +1,11 @@
 D-Bus Python Bindings 1.2.1 (UNRELEASED)
 ========================================
 
-...
+Dependencies:
+
+• Building from git (but not from tarballs) now requires
+  macros from the GNU Autoconf Archive, for example the autoconf-archive
+  package in Debian or Fedora derivatives.
 
 D-Bus Python Bindings 1.2.0 (2013-05-07)
 ========================================
