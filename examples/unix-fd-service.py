@@ -29,7 +29,7 @@ python unix-fd-client.py
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import gobject
+from gi.repository import GLib
 
 import dbus
 import dbus.service
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     name = dbus.service.BusName("com.example.SampleService", session_bus)
     object = SomeObject(session_bus, '/SomeObject')
 
-    mainloop = gobject.MainLoop()
+    mainloop = GLib.MainLoop()
     print "Running fd service."
     print usage
     mainloop.run()

@@ -34,7 +34,7 @@ import dbus
 import dbus.mainloop.glib
 import dbus.service
 
-import gobject
+from gi.repository import GLib
 import gconf
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -68,5 +68,5 @@ gconf_service = GConfObject()
 print ("GConf Proxy service started.")
 print ("Run 'gconf-proxy-client.py' to fetch a GConf key through the proxy...")
 
-mainloop = gobject.MainLoop()
+mainloop = GLib.MainLoop()
 mainloop.run()

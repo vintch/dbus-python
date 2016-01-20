@@ -32,7 +32,7 @@ python example-client.py --exit-service
 import sys
 import traceback
 
-import gobject
+from gi.repository import GLib
 
 import dbus
 import dbus.mainloop.glib
@@ -108,13 +108,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Make the method call after a short delay
-    gobject.timeout_add(1000, make_calls)
+    GLib.timeout_add(1000, make_calls)
 
     failed = False
     hello_replied = False
     raise_replied = False
 
-    loop = gobject.MainLoop()
+    loop = GLib.MainLoop()
     loop.run()
     if failed:
         raise SystemExit("Example async client failed!")

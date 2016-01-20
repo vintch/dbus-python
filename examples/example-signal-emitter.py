@@ -29,7 +29,7 @@ python example-signal-recipient.py --exit-service
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-import gobject
+from gi.repository import GLib
 
 import dbus
 import dbus.service
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     name = dbus.service.BusName('com.example.TestService', session_bus)
     object = TestObject(session_bus)
 
-    loop = gobject.MainLoop()
+    loop = GLib.MainLoop()
     print "Running example signal emitter service."
     print usage
     loop.run()

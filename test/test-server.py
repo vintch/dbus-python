@@ -7,7 +7,7 @@ import dbus.connection
 import dbus.service
 import dbus.server
 
-import gobject
+from gi.repository import GLib
 import os, sys
 
 class TestService(dbus.service.Object):
@@ -49,7 +49,7 @@ if 0 == child:
     os.close(pin)
 
     print 'server running: %s' % server.address
-    gobject.MainLoop().run()
+    GLib.MainLoop().run()
 
     print 'server quit'
 

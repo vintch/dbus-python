@@ -32,7 +32,7 @@ python example-signal-recipient.py --exit-service
 import sys
 import traceback
 
-import gobject
+from gi.repository import GLib
 
 import dbus
 import dbus.mainloop.glib
@@ -48,7 +48,7 @@ def emit_signal():
    object.emitHelloSignal(dbus_interface="com.example.TestService")
                           #reply_handler = handle_reply, error_handler = handle_error)
    # exit after waiting a short time for the signal
-   gobject.timeout_add(2000, loop.quit)
+   GLib.timeout_add(2000, loop.quit)
 
    if sys.argv[1:] == ['--exit-service']:
       object.Exit(dbus_interface='com.example.TestService')
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     bus.add_signal_receiver(catchall_testservice_interface_handler, dbus_interface = "com.example.TestService", message_keyword='dbus_message')
 
     # Tell the remote object to emit the signal after a short delay
-    gobject.timeout_add(2000, emit_signal)
+    GLib.timeout_add(2000, emit_signal)
 
-    loop = gobject.MainLoop()
+    loop = GLib.MainLoop()
     loop.run()

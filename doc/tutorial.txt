@@ -337,11 +337,11 @@ default, use::
 
 You must do this before `connecting to the bus`_.
 
-Actually starting the main loop is as usual for ``pygobject``::
+Actually starting the main loop is as usual for ``pygi``::
 
-    import gobject
+    from gi.repository import GLib
 
-    loop = gobject.MainLoop()
+    loop = GLib.MainLoop()
     loop.run()
 
 While ``loop.run()`` is executing, GLib will run your callbacks when
