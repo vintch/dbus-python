@@ -50,7 +50,7 @@ AM_TESTS_ENVIRONMENT = \
 	export DBUS_TOP_SRCDIR="$(abs_top_srcdir)"; \
 	export DBUS_TOP_BUILDDIR="$(abs_top_builddir)"; \
 	export DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)'; \
-	export PYTHONPATH="$(abs_top_builddir)/test/.libs:$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/_dbus_bindings/.libs:$(abs_top_builddir)/_dbus_glib_bindings/.libs"; \
+	export PYTHONPATH="$(abs_top_builddir)/test/.libs:$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/.libs"; \
 	export PYTHON='$(PYTHON)'; \
 	export DBUS_FATAL_WARNINGS=1; \
 	$(NULL)

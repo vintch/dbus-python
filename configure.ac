@@ -219,16 +219,12 @@ AC_ARG_ENABLE(coding-style-checks,
     [ENABLE_CODING_STYLE_CHECKS=$enableval], [ENABLE_CODING_STYLE_CHECKS=yes])
     ])
 
-AC_CONFIG_FILES(
+AC_CONFIG_FILES([
   Makefile
-  _dbus_bindings/Makefile
-  _dbus_glib_bindings/Makefile
   dbus-python.pc
   dbus/_version.py
-  examples/Makefile
-  m4/Makefile
   test/Makefile
   test/tmp-session-bus.conf
   test/TestSuitePythonService.service
-  tools/Makefile)
+])
 AC_OUTPUT
