@@ -6,7 +6,7 @@
   <type>session</type>
   <listen>unix:tmpdir=/tmp</listen>
 
-  <servicedir>@abs_top_builddir@/test</servicedir>
+  <servicedir>@G_TEST_BUILDDIR@/test</servicedir>
 
   <policy context="default">
     <!-- Allow everything to be sent -->

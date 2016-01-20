@@ -1,9 +1,10 @@
 abs_top_srcdir = @abs_top_srcdir@
 abs_top_builddir = @abs_top_builddir@
+installed_testdir = ${libexecdir}/installed-tests/${PACKAGE_TARNAME}
+installed_test_testdir = ${installed_testdir}/test
+installed_test_metadir = ${datadir}/installed-tests/${PACKAGE_TARNAME}
 
 ACLOCAL_AMFLAGS = -I m4
-
-SUBDIRS = test
 
 CLEANFILES =
 EXTRA_DIST = \
@@ -24,6 +25,8 @@ EXTRA_DIST = \
 	m4/am-check-pymod.m4 \
 	m4/am-check-python-headers.m4 \
 	m4/dbus-py-add-rst2htmlflag.m4 \
+	test/TestSuitePythonService.service.in \
+	test/tmp-session-bus.conf.in \
 	tools/check-coding-style.mk \
 	tools/check-c-style.sh \
 	tools/check-py-style.sh \
@@ -69,6 +72,12 @@ pyexec_LTLIBRARIES = \
 	_dbus_bindings.la \
 	_dbus_glib_bindings.la \
 	$(NULL)
+
+if ENABLE_INSTALLED_TESTS
+installed_test_LTLIBRARIES = dbus_py_test.la
+else
+noinst_LTLIBRARIES = dbus_py_test.la
+endif
 
 _dbus_bindings_la_LDFLAGS = \
 	$(pymod_ldflags) \
@@ -124,6 +133,17 @@ _dbus_glib_bindings_la_SOURCES = \
 	_dbus_glib_bindings/module.c \
 	$(NULL)
 
+# unconditionally add an -rpath to force Libtool to build a shared library
+dbus_py_test_la_LDFLAGS = \
+	$(pymod_ldflags) \
+	$(AM_LDFLAGS) \
+	-rpath $(installed_testdir) \
+	$(NULL)
+dbus_py_test_la_LIBADD = $(DBUS_LIBS)
+dbus_py_test_la_SOURCES = \
+	test/dbus_py_test.c \
+	$(top_srcdir)/include/dbus-python.h
+
 # === dbus package ===
 
 nobase_python_PYTHON = \
@@ -166,10 +186,162 @@ dbusinclude_HEADERS = include/dbus-python.h
 # === Tests ===
 
 cross-test-compile: all
+
 cross-test-server:
-	@$(MAKE) -C test cross-test-server
+	$(AM_TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-server.py
 cross-test-client:
-	@$(MAKE) -C test cross-test-client
+	$(AM_TESTS_ENVIRONMENT) $(PYTHON) $(top_srcdir)/test/cross-test-client.py
+
+AM_TESTS_ENVIRONMENT = \
+	export DBUS_TOP_SRCDIR="$(abs_top_srcdir)"; \
+	export DBUS_TOP_BUILDDIR="$(abs_top_builddir)"; \
+	export DBUS_TEST_TMPDIR="$(abs_top_builddir)/test"; \
+	export DBUS_TEST_UNINSTALLED=1; \
+	export DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)'; \
+	export PYTHONPATH="$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/.libs"; \
+	export PYTHON='$(PYTHON)'; \
+	export DBUS_FATAL_WARNINGS=1; \
+	$(NULL)
+
+TEST_EXTENSIONS = .sh .py
+
+if HAVE_DBUS_RUN_SESSION
+LOG_COMPILER = $(DBUS_RUN_SESSION) \
+	--config-file=$(top_builddir)/test/tmp-session-bus.conf \
+	--
+installed_log_compiler = $(DBUS_RUN_SESSION) \
+	--config-file=$(installed_testdir)/test/tmp-session-bus.conf \
+	--
+else
+LOG_COMPILER = $(top_srcdir)/test/with-session-bus.sh \
+	--config-file=$(top_builddir)/test/tmp-session-bus.conf \
+	--
+installed_log_compiler = $(installed_testdir)/test/with-session-bus.sh \
+	--config-file=$(installed_testdir)/test/tmp-session-bus.conf \
+	--
+endif
+
+installed_log_compiler += \
+	env \
+	PYTHON=$(PYTHON) \
+	PYTHONPATH=$(installed_testdir):$${PYTHONPATH} \
+	DBUS_TOP_SRCDIR=$(installed_testdir) \
+	DBUS_TOP_BUILDDIR=$(installed_testdir) \
+	$(NULL)
+
+SH_LOG_COMPILER = $(LOG_COMPILER) $(SHELL)
+PY_LOG_COMPILER = $(LOG_COMPILER) $(PYTHON)
+
+dist_test_sh = \
+	test/run-test.sh \
+	$(NULL)
+
+dist_test_py = \
+	test/test-client.py \
+	test/test-p2p.py \
+	test/test-signals.py \
+	test/test-standalone.py \
+	test/test-unusable-main-loop.py \
+	$(NULL)
+
+dist_test_extra_scripts = \
+	test/cross-test-client.py \
+	test/cross-test-server.py \
+	test/crosstest.py \
+	test/test-service.py \
+	test/with-session-bus.sh \
+	$(NULL)
+
+if HAVE_PYTHON_3
+dist_test_py += test/test-exception-py3.py
+else
+dist_test_py += test/test-exception-py2.py
+endif
+
+test_programs = \
+	test/test-import-repeatedly \
+	$(NULL)
+
+test_test_import_repeatedly_SOURCES = test/import-repeatedly.c
+test_test_import_repeatedly_CPPFLAGS = $(PYTHON_INCLUDES)
+test_test_import_repeatedly_LDADD = $(PYTHON_LIBS)
+
+TESTS = \
+	$(dist_test_py) \
+	$(dist_test_sh) \
+	$(test_programs) \
+	$(NULL)
+
+noinst_DATA = \
+	test/TestSuitePythonService.service \
+	test/tmp-session-bus.conf \
+	$(NULL)
+CLEANFILES += $(noinst_DATA)
+
+installed_test_test_data = \
+	test/installable/TestSuitePythonService.service \
+	test/installable/tmp-session-bus.conf \
+	$(NULL)
+CLEANFILES += $(installed_test_test_data)
+
+$(noinst_DATA): test/%: test/%.in
+	@$(MKDIR_P) $(dir $@)
+	$(AM_V_GEN)$(SED) \
+		-e 's|[@]PYTHON[@]|$(PYTHON)|g' \
+		-e 's|[@]G_TEST_SRCDIR[@]|$(abs_top_srcdir)|g' \
+		-e 's|[@]G_TEST_BUILDDIR[@]|$(abs_top_builddir)|g' \
+		$< > $@
+
+$(installed_test_test_data): test/installable/%: test/%.in
+	@$(MKDIR_P) $(dir $@)
+	$(AM_V_GEN)$(SED) \
+		-e 's|[@]PYTHON[@]|$(PYTHON)|g' \
+		-e 's|[@]G_TEST_SRCDIR[@]|$(installed_testdir)|g' \
+		-e 's|[@]G_TEST_BUILDDIR[@]|$(installed_testdir)|g' \
+		$< > $@
+
+if ENABLE_INSTALLED_TESTS
+nobase_installed_test_PROGRAMS = $(test_programs)
+nobase_dist_installed_test_SCRIPTS = \
+	$(dist_test_py) \
+	$(dist_test_sh) \
+	$(dist_test_extra_scripts) \
+	$(NULL)
+installed_test_test_DATA = $(installed_test_test_data)
+installed_test_meta_DATA = $(installed_test_metadata)
+else
+noinst_PROGRAMS = $(test_programs)
+dist_noinst_SCRIPTS = \
+	$(dist_test_py) \
+	$(dist_test_sh) \
+	$(dist_test_extra_scripts) \
+	$(NULL)
+endif
+
+installed_test_metadata = \
+	$(patsubst %,%.test,$(dist_test_py)) \
+	$(patsubst %,%.test,$(dist_test_sh)) \
+	$(patsubst %,%.test,$(test_programs)) \
+	$(NULL)
+CLEANFILES += $(installed_test_metadata)
+
+$(patsubst %,%.test,$(dist_test_py)): %.test: Makefile
+	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
+	echo 'Type=session' >> $@.tmp; \
+	echo 'Exec=$(installed_log_compiler) $(PYTHON) $(installed_testdir)/$*' >> $@.tmp; \
+	mv $@.tmp $@)
+
+$(patsubst %,%.test,$(dist_test_sh)): %.test: Makefile
+	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
+	echo 'Type=session' >> $@.tmp; \
+	echo 'Exec=$(installed_log_compiler) $(installed_testdir)/$*' >> $@.tmp; \
+	mv $@.tmp $@)
+
+$(patsubst %,%.test,$(test_programs)): %.test: Makefile
+	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
+	echo 'Type=session' >> $@.tmp; \
+	echo 'Exec=$(installed_log_compiler) $(installed_testdir)/$*$(EXEEXT)' >> $@.tmp; \
+	mv $@.tmp $@)
 
 # === Documentation ===
 

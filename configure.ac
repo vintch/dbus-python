@@ -60,6 +60,7 @@ m4_define([_LT_AC_TAGCONFIG],[])
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 AC_C_INLINE
+AC_PROG_MKDIR_P
 
 AM_PATH_PYTHON([2.6])
 
@@ -85,6 +86,13 @@ AS_IF([test "${PYTHON_LIBS+set}" = set],
   ])
 
 AC_SUBST([PYTHON_LIBS])
+
+AC_ARG_ENABLE([installed-tests],
+  [AC_HELP_STRING([--enable-installed tests],
+    [install test programs and helpers for as-installed testing])],
+  [],
+  [enable_installed_tests=no])
+AM_CONDITIONAL([ENABLE_INSTALLED_TESTS], [test "_$enable_installed_tests" = _yes])
 
 dnl Building documentation
 
@@ -223,8 +231,5 @@ AC_CONFIG_FILES([
   Makefile
   dbus-python.pc
   dbus/_version.py
-  test/Makefile
-  test/tmp-session-bus.conf
-  test/TestSuitePythonService.service
 ])
 AC_OUTPUT

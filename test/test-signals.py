@@ -29,9 +29,6 @@ import unittest
 import time
 import logging
 
-builddir = os.path.normpath(os.environ["DBUS_TOP_BUILDDIR"])
-pydir = os.path.normpath(os.environ["DBUS_TOP_SRCDIR"])
-
 import dbus
 import _dbus_bindings
 import dbus.glib
@@ -46,14 +43,18 @@ logging.basicConfig()
 logging.getLogger().setLevel(1)
 logger = logging.getLogger('test-signals')
 
+if 'DBUS_TEST_UNINSTALLED' in os.environ:
+    builddir = os.path.normpath(os.environ["DBUS_TOP_BUILDDIR"])
+    pydir = os.path.normpath(os.environ["DBUS_TOP_SRCDIR"])
+    pkg = dbus.__file__
 
-pkg = dbus.__file__
-if not pkg.startswith(pydir):
-    raise Exception("DBus modules (%s) are not being picked up from the package"%pkg)
+    if not pkg.startswith(pydir):
+        raise Exception("DBus modules (%s) are not being picked up from the "
+                "package" % pkg)
 
-if not _dbus_bindings.__file__.startswith(builddir):
-    raise Exception("DBus modules (%s) are not being picked up from the package"%_dbus_bindings.__file__)
-
+    if not _dbus_bindings.__file__.startswith(builddir):
+        raise Exception("DBus modules (%s) are not being picked up from the "
+                "package" % _dbus_bindings.__file__)
 
 NAME = "org.freedesktop.DBus.TestSuitePythonService"
 IFACE = "org.freedesktop.DBus.TestSuiteInterface"

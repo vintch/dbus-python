@@ -23,15 +23,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
+set -e
+
 failed=
 skipped=
 
-dbus-monitor > "$DBUS_TOP_BUILDDIR"/test/monitor.log &
+if ! [ -d "$DBUS_TEST_TMPDIR" ]; then
+  DBUS_TEST_TMPDIR="$(mktemp -d)"
+  if ! [ -d "$DBUS_TEST_TMPDIR" ]; then
+    echo "failed to create temporary directory (install mktemp?)" >&2
+    exit 1
+  fi
+fi
+
+dbus-monitor > "$DBUS_TEST_TMPDIR"/monitor.log &
 
 echo "DBUS_TOP_SRCDIR=$DBUS_TOP_SRCDIR"
 echo "DBUS_TOP_BUILDDIR=$DBUS_TOP_BUILDDIR"
 echo "PYTHONPATH=$PYTHONPATH"
-echo "PYTHON=$PYTHON"
+echo "PYTHON=${PYTHON:=python}"
 
 #echo "running the examples"
 
@@ -48,16 +58,16 @@ echo "PYTHON=$PYTHON"
 
 echo "running cross-test (for better diagnostics use mjj29's dbus-test)"
 
-$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-server.py > "$DBUS_TOP_BUILDDIR"/test/cross-server.log &
+$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-server.py > "$DBUS_TEST_TMPDIR"/cross-server.log &
+cross_test_server_pid="$!"
 sleep 1
-$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-client.py > "$DBUS_TOP_BUILDDIR"/test/cross-client.log
-e=$?
+$PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-client.py > "$DBUS_TEST_TMPDIR"/cross-client.log || e=$?
 echo "test-client exit status: $e"
 
 if test $e = 77; then
   echo "cross-test-client exited $e, marking as skipped"
   skipped=yes
-elif grep . "$DBUS_TOP_BUILDDIR"/test/cross-client.log >/dev/null; then
+elif grep . "$DBUS_TEST_TMPDIR"/cross-client.log >/dev/null; then
   echo "OK, cross-test-client produced some output"
 else
   echo "cross-test-client produced no output" >&2
@@ -67,37 +77,45 @@ fi
 if test $e = 77; then
   echo "test-client exited $e, marking as skipped"
   skipped=yes
-elif grep . "$DBUS_TOP_BUILDDIR"/test/cross-server.log >/dev/null; then
+elif grep . "$DBUS_TEST_TMPDIR"/cross-server.log >/dev/null; then
   echo "OK, cross-test-server produced some output"
 else
   echo "cross-test-server produced no output" >&2
   failed=yes
 fi
 
-if grep fail "$DBUS_TOP_BUILDDIR"/test/cross-client.log; then
+if grep fail "$DBUS_TEST_TMPDIR"/cross-client.log; then
   failed=yes
 else
   echo "  - cross-test client reported no failures"
 fi
 
-if grep untested "$DBUS_TOP_BUILDDIR"/test/cross-server.log; then
+if grep untested "$DBUS_TEST_TMPDIR"/cross-server.log; then
   failed=yes
 else
   echo "  - cross-test server reported no untested functions"
 fi
 
+echo "waiting for cross-test server to exit"
+if wait "$cross_test_server_pid"; then
+  echo "cross-test server: exit status 0"
+else
+  echo "cross-test server: exit status $?"
+  failed=yes
+fi
+
 echo "==== client log ===="
-cat "$DBUS_TOP_BUILDDIR"/test/cross-client.log
+cat "$DBUS_TEST_TMPDIR"/cross-client.log
 echo "==== end ===="
 
 echo "==== server log ===="
-cat "$DBUS_TOP_BUILDDIR"/test/cross-server.log
+cat "$DBUS_TEST_TMPDIR"/cross-server.log
 echo "==== end ===="
 
-rm -f "$DBUS_TOP_BUILDDIR"/test/test-service.log
-rm -f "$DBUS_TOP_BUILDDIR"/test/cross-client.log
-rm -f "$DBUS_TOP_BUILDDIR"/test/cross-server.log
-rm -f "$DBUS_TOP_BUILDDIR"/test/monitor.log
+rm -f "$DBUS_TEST_TMPDIR"/test-service.log
+rm -f "$DBUS_TEST_TMPDIR"/cross-client.log
+rm -f "$DBUS_TEST_TMPDIR"/cross-server.log
+rm -f "$DBUS_TEST_TMPDIR"/monitor.log
 
 if test -n "$skipped"; then
   exit 77

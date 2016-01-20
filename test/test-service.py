@@ -27,13 +27,22 @@ import os
 import logging
 from time import sleep
 
-builddir = os.path.normpath(os.environ["DBUS_TOP_BUILDDIR"])
-pydir = os.path.normpath(os.environ["DBUS_TOP_SRCDIR"])
-
 import dbus
 
-if not dbus.__file__.startswith(pydir):
-    raise Exception("DBus modules are not being picked up from the package")
+if 'DBUS_TEST_UNINSTALLED' in os.environ:
+    import _dbus_bindings
+
+    builddir = os.path.normpath(os.environ["DBUS_TOP_BUILDDIR"])
+    pydir = os.path.normpath(os.environ["DBUS_TOP_SRCDIR"])
+    pkg = dbus.__file__
+
+    if not pkg.startswith(pydir):
+        raise Exception("DBus modules (%s) are not being picked up from the "
+                "package" % pkg)
+
+    if not _dbus_bindings.__file__.startswith(builddir):
+        raise Exception("DBus modules (%s) are not being picked up from the "
+                "package" % _dbus_bindings.__file__)
 
 import dbus.service
 import dbus.glib
@@ -44,7 +53,13 @@ from gi.repository import GObject
 from dbus._compat import is_py2, is_py3
 
 
-logging.basicConfig(filename=builddir + '/test/test-service.log', filemode='a')
+if 'DBUS_TEST_TMPDIR' in os.environ:
+    logging.basicConfig(
+            filename=os.environ['DBUS_TEST_TMPDIR'] + '/test-service.log',
+            filemode='a')
+else:
+    logging.basicConfig()
+
 logging.getLogger().setLevel(1)
 logger = logging.getLogger('test-service')
 

@@ -28,9 +28,6 @@ import os
 import unittest
 import logging
 
-builddir = os.path.normpath(os.environ["DBUS_TOP_BUILDDIR"])
-pydir = os.path.normpath(os.environ["DBUS_TOP_SRCDIR"])
-
 import dbus
 import dbus.glib
 import dbus.service
