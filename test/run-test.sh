@@ -28,6 +28,11 @@ set -e
 failed=
 skipped=
 
+echo "DBUS_TOP_SRCDIR=$DBUS_TOP_SRCDIR"
+echo "DBUS_TOP_BUILDDIR=$DBUS_TOP_BUILDDIR"
+echo "PYTHONPATH=$PYTHONPATH"
+echo "PYTHON=${PYTHON:=python}"
+
 if ! [ -d "$DBUS_TEST_TMPDIR" ]; then
   DBUS_TEST_TMPDIR="$(mktemp -d)"
   if ! [ -d "$DBUS_TEST_TMPDIR" ]; then
@@ -36,12 +41,12 @@ if ! [ -d "$DBUS_TEST_TMPDIR" ]; then
   fi
 fi
 
-dbus-monitor > "$DBUS_TEST_TMPDIR"/monitor.log &
+if ! "$PYTHON" -c 'from gi.repository import GLib'; then
+  echo "could not import python-gi"
+  exit 77
+fi
 
-echo "DBUS_TOP_SRCDIR=$DBUS_TOP_SRCDIR"
-echo "DBUS_TOP_BUILDDIR=$DBUS_TOP_BUILDDIR"
-echo "PYTHONPATH=$PYTHONPATH"
-echo "PYTHON=${PYTHON:=python}"
+dbus-monitor > "$DBUS_TEST_TMPDIR"/monitor.log &
 
 #echo "running the examples"
 
@@ -60,7 +65,9 @@ echo "running cross-test (for better diagnostics use mjj29's dbus-test)"
 
 $PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-server.py > "$DBUS_TEST_TMPDIR"/cross-server.log &
 cross_test_server_pid="$!"
-sleep 1
+
+$PYTHON "$DBUS_TOP_SRCDIR"/test/wait-for-name.py org.freedesktop.DBus.Binding.TestServer
+
 $PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-client.py > "$DBUS_TEST_TMPDIR"/cross-client.log || e=$?
 echo "test-client exit status: $e"
 

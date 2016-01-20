@@ -249,6 +249,7 @@ dist_test_extra_scripts = \
 	test/cross-test-server.py \
 	test/crosstest.py \
 	test/test-service.py \
+	test/wait-for-name.py \
 	test/with-session-bus.sh \
 	$(NULL)
 
