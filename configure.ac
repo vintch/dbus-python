@@ -108,8 +108,8 @@ AC_MSG_RESULT([$enable_api_docs])
 
 
 if test "$enable_api_docs" != no || test "$enable_html_docs" != no; then
-  AM_CHECK_PYMOD([docutils], [__version__], [have_docutils=yes], [have_docutils=no])
-  if test "$have_docutils" = no; then
+  AX_PYTHON_MODULE([docutils])
+  if test "$HAVE_PYMOD_DOCUTILS" = no; then
     if test "$enable_api_docs" = "if possible"; then
        enable_api_docs=no
     fi
@@ -125,9 +125,9 @@ fi
 AS_IF([test "${enable_api_docs}" != no],
   [
   AC_PATH_PROG([EPYDOC], [epydoc])
-  AM_CHECK_PYMOD([epydoc], [__version__], [have_epydoc_module=yes], [have_epydoc_module=no])
+  AX_PYTHON_MODULE([epydoc])
   AC_MSG_CHECKING([epydoc 3])
-  AS_IF([test -n "$EPYDOC" && test "$have_epydoc_module" = yes],
+  AS_IF([test -n "$EPYDOC" && test "$HAVE_PYMOD_EPYDOC" = yes],
     [
     EPYDOC_VERSION=`$EPYDOC --version`
     AS_CASE(["$EPYDOC_VERSION"],
