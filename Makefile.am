@@ -25,6 +25,7 @@ EXTRA_DIST = \
 	m4/am-check-pymod.m4 \
 	m4/am-check-python-headers.m4 \
 	m4/dbus-py-add-rst2htmlflag.m4 \
+	setup.py \
 	test/TestSuitePythonService.service.in \
 	test/tmp-session-bus.conf.in \
 	tools/check-coding-style.mk \
@@ -347,6 +348,7 @@ $(patsubst %,%.test,$(test_programs)): %.test: Makefile
 # === Documentation ===
 
 dist-hook:
+	echo $(VERSION) > $(distdir)/.version
 	chmod u+w $(distdir)/ChangeLog
 	if test -d $(top_srcdir)/.git; then \
 		if GIT_DIR=$(top_srcdir)/.git git log --stat > $(distdir)/ChangeLog; then \
@@ -355,6 +357,13 @@ dist-hook:
 			GIT_DIR=$(top_srcdir)/.git git log > $(distdir)/ChangeLog; \
 		fi; \
 	fi
+	touch $(distdir)/MANIFEST
+	touch $(distdir)/MANIFEST.in
+	( cd $(distdir) && find -type d -o -print ) | \
+		LC_ALL=C sort | \
+		$(SED) -e 's|^\./||' \
+		> $(distdir)/MANIFEST
+	sed -e 's/.*/include &/' < $(distdir)/MANIFEST > $(distdir)/MANIFEST.in
 
 TXT_RSTDOCS = \
 	doc/tutorial.txt \

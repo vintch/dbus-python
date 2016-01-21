@@ -13,6 +13,7 @@
 /aclocal.m4
 /api/
 /autom4te.cache/
+/build/
 /build-aux/
 /compile
 /config.cache
