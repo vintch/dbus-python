@@ -22,7 +22,6 @@ EXTRA_DIST = \
 	examples/list-system-services.py \
 	examples/unix-fd-client.py \
 	examples/unix-fd-service.py \
-	m4/am-check-pymod.m4 \
 	m4/am-check-python-headers.m4 \
 	m4/dbus-py-add-rst2htmlflag.m4 \
 	setup.py \
