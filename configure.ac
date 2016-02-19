@@ -1,23 +1,15 @@
 -*- mode: m4 -*-
 AC_PREREQ(2.59c)
 
-dnl If not 1, append datestamp to the version number
-m4_define(dbus_python_released, 0)
-dnl The dbus-python version number (must actually be numeric at the moment)
+dnl The dbus-python version number
 m4_define(dbus_python_major_version, 1)
 m4_define(dbus_python_minor_version, 2)
-m4_define(dbus_python_micro_version, 0)
+dnl Micro version is odd for non-releases
+m4_define(dbus_python_micro_version, 1)
 
-m4_define(dbus_python_maybe_datestamp,
-          m4_esyscmd([if test x]dbus_python_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
-
-m4_define(dbus_python_version, dbus_python_major_version.dbus_python_minor_version.dbus_python_micro_version[]dbus_python_maybe_datestamp)
-
-dnl versions of packages we require ...
-dnl m4_define(glib_required_version, 2.8.0)
-
-AC_INIT(dbus-python, dbus_python_version,
-        [http://bugs.freedesktop.org/enter_bug.cgi?product=dbus&component=python])
+AC_INIT([dbus-python],
+  dbus_python_major_version.dbus_python_minor_version.dbus_python_micro_version,
+  [http://bugs.freedesktop.org/enter_bug.cgi?product=dbus&component=python])
 AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -25,6 +17,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 m4_pattern_forbid([^AX_],
   [Unexpanded AX_ macro found. Please install GNU autoconf-archive])
 
+AX_IS_RELEASE([micro-version])
 AC_DEFINE(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version, [dbus-python major version])
 AC_SUBST(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version)
 AC_DEFINE(DBUS_PYTHON_MINOR_VERSION, dbus_python_minor_version, [dbus-python minor version])
@@ -191,8 +184,7 @@ PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.6])
 PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.70])
 
 AX_COMPILER_FLAGS([WARN_CFLAGS],
-  [WARN_LDFLAGS],
-  [ifelse(dbus_python_released, [1], [yes], [no])],
+  [WARN_LDFLAGS], [],
   dnl unfortunately the Python headers fail various checks included in
   dnl AX_COMPILER_FLAGS, and are not const-correct for strings
   [ \
@@ -210,19 +202,11 @@ WARN_CFLAGS="$(echo "${WARN_CFLAGS}" | ${SED} \
   -e s/-Wwrite-strings// \
   )"
 
-ifelse(dbus_python_released, 1,
-    [ # version x.y.z - disable coding style checks by default
-AC_ARG_ENABLE(coding-style-checks,
-  AC_HELP_STRING([--enable-coding-style-checks],
-                 [check coding style using grep]),
-    [ENABLE_CODING_STYLE_CHECKS=$enableval], [ENABLE_CODING_STYLE_CHECKS=no] )
-    ],
-    [ # version x.y.z.200xyyzz - enable coding style checks by default
-AC_ARG_ENABLE(coding-style-checks,
-  AC_HELP_STRING([--disable-coding-style-checks],
-                 [do not check coding style using grep]),
-    [ENABLE_CODING_STYLE_CHECKS=$enableval], [ENABLE_CODING_STYLE_CHECKS=yes])
-    ])
+AC_ARG_ENABLE([coding-style-checks],
+  [AC_HELP_STRING([--enable-coding-style-checks],
+                 [check coding style using grep])],
+  [ENABLE_CODING_STYLE_CHECKS=$enableval],
+  [ENABLE_CODING_STYLE_CHECKS=$ax_is_release])
 
 AC_CONFIG_FILES([
   Makefile

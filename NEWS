@@ -1,5 +1,10 @@
-D-Bus Python Bindings 1.2.1 (UNRELEASED)
+D-Bus Python Bindings 1.2.2 (UNRELEASED)
 ========================================
+
+Versioning changes:
+
+• dbus-python releases now have an even micro version (1.2.0, 1.2.2),
+  and snapshots from git have an odd micro version (1.2.1).
 
 Dependencies:
 
