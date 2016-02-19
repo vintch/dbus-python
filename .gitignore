@@ -14,8 +14,8 @@
 /aclocal.m4
 /api/
 /autom4te.cache/
-/build/
 /build-aux/
+/build/
 /compile
 /config.cache
 /config.guess
@@ -42,7 +42,11 @@
 /missing
 /py-compile
 /stamp-h1
+/test-suite.log
+/test/*.trs
 /test/TestSuitePythonService.service
+/test/run-test.log
+/test/test-*.log
 /test/test-import-repeatedly
 /test/tmp-session-bus.conf
 Makefile
