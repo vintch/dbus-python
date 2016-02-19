@@ -22,6 +22,9 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 AC_CONFIG_AUX_DIR([build-aux])
 
+m4_pattern_forbid([^AX_],
+  [Unexpanded AX_ macro found. Please install GNU autoconf-archive])
+
 AC_DEFINE(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version, [dbus-python major version])
 AC_SUBST(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version)
 AC_DEFINE(DBUS_PYTHON_MINOR_VERSION, dbus_python_minor_version, [dbus-python minor version])
