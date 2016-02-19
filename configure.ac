@@ -96,6 +96,8 @@ AM_CONDITIONAL([ENABLE_INSTALLED_TESTS], [test "_$enable_installed_tests" = _yes
 
 dnl Building documentation
 
+AX_GENERATE_CHANGELOG
+
 AC_MSG_CHECKING([whether you want to build HTML docs])
 AC_ARG_ENABLE(html-docs,
 AC_HELP_STRING([--enable-html-docs], [Enable HTML documentation building (requires docutils, default: auto-detect)]), enable_html_docs=$enableval, enable_html_docs="if possible")

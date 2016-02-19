@@ -346,16 +346,10 @@ $(patsubst %,%.test,$(test_programs)): %.test: Makefile
 
 # === Documentation ===
 
-dist-hook:
+@GENERATE_CHANGELOG_RULES@
+
+dist-hook: dist-ChangeLog
 	echo $(VERSION) > $(distdir)/.version
-	chmod u+w $(distdir)/ChangeLog
-	if test -d $(top_srcdir)/.git; then \
-		if GIT_DIR=$(top_srcdir)/.git git log --stat > $(distdir)/ChangeLog; then \
-			: ; \
-		else \
-			GIT_DIR=$(top_srcdir)/.git git log > $(distdir)/ChangeLog; \
-		fi; \
-	fi
 	touch $(distdir)/MANIFEST
 	touch $(distdir)/MANIFEST.in
 	( cd $(distdir) && find -type d -o -print ) | \
