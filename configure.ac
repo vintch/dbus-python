@@ -42,14 +42,11 @@ AC_CANONICAL_HOST
 
 # mingw32, mingw-w64 are native Windows; for our purposes, Cygwin isn't
 AC_MSG_CHECKING([for native Windows host])
-case "$host" in
-	(*-*-mingw*)
-		windows=yes
-		;;
-	(*)
-		windows=no
-		;;
-esac
+AS_CASE(["$host"],
+  [*-*-mingw*],
+    [windows=yes],
+  [*],
+    [windows=no])
 AC_MSG_RESULT([$windows])
 AM_CONDITIONAL([WINDOWS], [test "x$windows" = xyes])
 
@@ -110,20 +107,17 @@ AC_HELP_STRING([--enable-api-docs], [Enable API documentation building (requires
 AC_MSG_RESULT([$enable_api_docs])
 
 
-if test "$enable_api_docs" != no || test "$enable_html_docs" != no; then
+AS_IF([test "$enable_api_docs" != no || test "$enable_html_docs" != no],
+  [
   AX_PYTHON_MODULE([docutils])
-  if test "$HAVE_PYMOD_DOCUTILS" = no; then
-    if test "$enable_api_docs" = "if possible"; then
-       enable_api_docs=no
-    fi
-    if test "$enable_html_docs" = "if possible"; then
-       enable_html_docs=no
-    fi
-    if test "$enable_api_docs" != no || test "$enable_html_docs" != no; then
-      AC_MSG_ERROR([cannot compile HTML documentation or API documentation without python-docutils installed])
-    fi
-  fi
-fi
+  AS_IF([test "$HAVE_PYMOD_DOCUTILS" = no],
+    [
+    AS_IF([test "$enable_api_docs" = "if possible"], [enable_api_docs=no])
+    AS_IF([test "$enable_html_docs" = "if possible"], [enable_html_docs=no])
+    AS_IF([test "$enable_api_docs" != no || test "$enable_html_docs" != no],
+      [AC_MSG_ERROR([cannot compile HTML documentation or API documentation without python-docutils installed])])
+    ])
+  ])
 
 AS_IF([test "${enable_api_docs}" != no],
   [
@@ -142,8 +136,7 @@ AS_IF([test "${enable_api_docs}" != no],
         [
         AC_MSG_RESULT([no, $EPYDOC_VERSION])
         EPYDOC=
-        ],
-      )
+        ])
     ],
     [
     EPYDOC=
@@ -154,10 +147,9 @@ AS_IF([test "${enable_api_docs}" != no],
       [if*possible],
         [enable_api_docs=no],
       [*],
-        [AC_MSG_ERROR([cannot compile API documentation without epydoc 3.0beta1 or newer installed])],
-    )
+        [AC_MSG_ERROR([cannot compile API documentation without epydoc 3.0beta1 or newer installed])])
     ])
-])
+  ])
 
 AC_ARG_VAR([DBUS_RUN_SESSION],
   [The dbus-run-session tool from dbus 1.8 or later])
@@ -165,18 +157,19 @@ AC_PATH_PROG([DBUS_RUN_SESSION], [dbus-run-session], [false])
 AM_CONDITIONAL([HAVE_DBUS_RUN_SESSION], [test "$DBUS_RUN_SESSION" != false])
 
 RST2HTMLFLAGS=
-if test "${enable_html_docs}" != no; then
+AS_IF([test "${enable_html_docs}" != no],
+  [
   AC_CHECK_PROGS([RST2HTML], [rst2html rst2html.py], [])
-  if test -z "$RST2HTML"; then
-    case "$enable_html_docs" in
-      if*possible)
-        enable_html_docs=no
-      ;;
-      *)
-        AC_MSG_ERROR([cannot compile HTML documentation without rst2html installed])
-      ;;
-    esac
-  else
+  AS_IF([test -z "$RST2HTML"],
+    [
+    AS_CASE(["$enable_html_docs"],
+      [if*possible],
+        [enable_html_docs=no],
+      [*],
+        [AC_MSG_ERROR([cannot compile HTML documentation without rst2html installed])])
+    ])
+  ],
+  [
     DBUS_PY_ADD_RST2HTMLFLAG([--generator])
     DBUS_PY_ADD_RST2HTMLFLAG([--date])
     DBUS_PY_ADD_RST2HTMLFLAG([--time])
@@ -185,8 +178,7 @@ if test "${enable_html_docs}" != no; then
     DBUS_PY_ADD_RST2HTMLFLAG([--no-file-insertion])
     DBUS_PY_ADD_RST2HTMLFLAG([--cloak-email-addresses])
     DBUS_PY_ADD_RST2HTMLFLAG([--input-encoding=UTF-8])
-  fi
-fi
+  ])
 AC_SUBST([RST2HTML])
 AC_SUBST([RST2HTMLFLAGS])
 
