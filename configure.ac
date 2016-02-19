@@ -218,7 +218,7 @@ AC_ARG_ENABLE(coding-style-checks,
     [ # version x.y.z.200xyyzz - enable coding style checks by default
 AC_ARG_ENABLE(coding-style-checks,
   AC_HELP_STRING([--disable-coding-style-checks],
-                 [don't check coding style using grep]),
+                 [do not check coding style using grep]),
     [ENABLE_CODING_STYLE_CHECKS=$enableval], [ENABLE_CODING_STYLE_CHECKS=yes])
     ])
 
