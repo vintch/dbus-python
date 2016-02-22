@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (C) 2006 Collabora Ltd. <http://www.collabora.co.uk/>
 #
 # Permission is hereby granted, free of charge, to any person
