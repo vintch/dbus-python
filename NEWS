@@ -1,5 +1,7 @@
-D-Bus Python Bindings 1.2.2 (UNRELEASED)
+D-Bus Python Bindings 1.2.2 (2016-02-22)
 ========================================
+
+The “mind fray” release.
 
 Versioning changes:
 
@@ -11,6 +13,46 @@ Dependencies:
 • Building from git (but not from tarballs) now requires
   macros from the GNU Autoconf Archive, for example the autoconf-archive
   package in Debian or Fedora derivatives.
+
+• Building from git (but not from tarballs) now requires Automake 1.13
+  or later.
+
+• The automated tests and some examples now require PyGI (the gi module),
+  not PyGObject 2 (the deprecated glib and gobject modules).
+
+Enhancements:
+
+• There is now a setuptools setup.py, allowing dbus-python to be installed
+  into a virtualenv using pip from a standard Automake source release. This
+  requires pre-existing system-wide installations of the normal build
+  dependencies (pkg-config, libdbus, dbus-glib, a C compiler) and has
+  some limitations. For system-wide installations and development,
+  please use the Autoconf/Automake build system directly.
+  (fd.o #55439; Simon McVittie)
+
+• dbus-python now uses the common compiler warnings from AX_COMPILER_FLAGS
+  (Simon McVittie)
+
+• The automated tests can now be installed as GNOME-style "installed tests",
+  and should be somewhat more reliable (Simon McVittie)
+
+Fixes:
+
+• "from dbus.service import *" now imports FallbackObject
+  (fd.o #85720; Ben Longbons)
+
+• The GConf-related examples work again (fd.o #85720; Ben Longbons)
+
+• Consistently make examples executable, and install them all
+  (fd.o #85720; Ben Longbons)
+
+• Search PATH for an appropriately-versioned pythonX.Y-config, or as a last
+  resort python-config, if there isn't a ${PYTHON}-config in the
+  same directory as ${PYTHON} (fd.o #92085; Yamashita, Yuu)
+
+• Add support for the Automake 1.13 parallel test driver (Simon McVittie)
+
+• Skip building API documentation if "import epydoc" fails (Simon McVittie)
 
 D-Bus Python Bindings 1.2.0 (2013-05-07)
 ========================================
