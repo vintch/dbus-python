@@ -244,10 +244,13 @@ dist_test_py = \
 	test/test-unusable-main-loop.py \
 	$(NULL)
 
+dist_test_extra_python = \
+	test/crosstest.py \
+	$(NULL)
+
 dist_test_extra_scripts = \
 	test/cross-test-client.py \
 	test/cross-test-server.py \
-	test/crosstest.py \
 	test/test-service.py \
 	test/wait-for-name.py \
 	test/with-session-bus.sh \
@@ -307,6 +310,9 @@ nobase_dist_installed_test_SCRIPTS = \
 	$(dist_test_py) \
 	$(dist_test_sh) \
 	$(dist_test_extra_scripts) \
+	$(NULL)
+nobase_dist_installed_test_PYTHON = \
+	$(dist_test_extra_python) \
 	$(NULL)
 installed_test_test_DATA = $(installed_test_test_data)
 installed_test_meta_DATA = $(installed_test_metadata)
