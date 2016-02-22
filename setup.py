@@ -32,7 +32,7 @@ import subprocess
 import sys
 
 if os.path.exists('.version'):
-    version = open('.version', encoding='utf-8').read().strip()
+    version = open('.version').read().strip()
 else:
     version = subprocess.check_output(['autoconf', '--trace', 'AC_INIT:$2',
         'configure.ac']).decode('utf-8').strip()
