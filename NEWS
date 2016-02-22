@@ -43,7 +43,7 @@ Enhancements:
 
 Fixes:
 
-• "from dbus.service import *" now imports FallbackObject
+• ``from dbus.service import *`` now imports FallbackObject
   (fd.o #85720; Ben Longbons)
 
 • The GConf-related examples work again (fd.o #85720; Ben Longbons)
