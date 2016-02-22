@@ -17,6 +17,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 m4_pattern_forbid([^AX_],
   [Unexpanded AX_ macro found. Please install GNU autoconf-archive])
 
+# By default, rebuild autotools files on demand; only use ./missing if the
+# user says --disable-maintainer-mode (in particular this is useful when
+# running under pip, which does not preserve timestamps)
+AM_MAINTAINER_MODE([enable])
+
 AX_IS_RELEASE([micro-version])
 AC_DEFINE(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version, [dbus-python major version])
 AC_SUBST(DBUS_PYTHON_MAJOR_VERSION, dbus_python_major_version)

@@ -53,6 +53,7 @@ class Build(Distribution().get_command_class('build')):
 
         subprocess.check_call([
                 configure,
+                '--disable-maintainer-mode',
                 'PYTHON=' + sys.executable,
                 # Put the documentation, etc. out of the way: we only want
                 # the Python code and extensions
