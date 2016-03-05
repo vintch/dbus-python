@@ -75,9 +75,9 @@ pyexec_LTLIBRARIES = \
 	$(NULL)
 
 if ENABLE_INSTALLED_TESTS
-installed_test_LTLIBRARIES = dbus_py_test.la
+nobase_installed_test_LTLIBRARIES = test/dbus_py_test.la
 else
-noinst_LTLIBRARIES = dbus_py_test.la
+noinst_LTLIBRARIES = test/dbus_py_test.la
 endif
 
 _dbus_bindings_la_LDFLAGS = \
@@ -135,13 +135,13 @@ _dbus_glib_bindings_la_SOURCES = \
 	$(NULL)
 
 # unconditionally add an -rpath to force Libtool to build a shared library
-dbus_py_test_la_LDFLAGS = \
+test_dbus_py_test_la_LDFLAGS = \
 	$(pymod_ldflags) \
 	$(AM_LDFLAGS) \
 	-rpath $(installed_testdir) \
 	$(NULL)
-dbus_py_test_la_LIBADD = $(DBUS_LIBS)
-dbus_py_test_la_SOURCES = \
+test_dbus_py_test_la_LIBADD = $(DBUS_LIBS)
+test_dbus_py_test_la_SOURCES = \
 	include/dbus/dbus-python.h \
 	test/dbus_py_test.c \
 	$(NULL)
@@ -199,7 +199,7 @@ AM_TESTS_ENVIRONMENT = \
 	export DBUS_TEST_TMPDIR="$(abs_top_builddir)/test"; \
 	export DBUS_TEST_UNINSTALLED=1; \
 	export DBUS_PYTHON_VERSION='$(PACKAGE_VERSION)'; \
-	export PYTHONPATH="$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/.libs"; \
+	export PYTHONPATH="$(abs_top_srcdir):$(abs_top_srcdir)/test:$(abs_top_builddir)/.libs:$(abs_top_builddir)/test/.libs"; \
 	export PYTHON='$(PYTHON)'; \
 	export DBUS_FATAL_WARNINGS=1; \
 	$(NULL)
@@ -225,7 +225,6 @@ endif
 installed_log_compiler += \
 	env \
 	PYTHON=$(PYTHON) \
-	PYTHONPATH=$(installed_testdir):$${PYTHONPATH} \
 	DBUS_TOP_SRCDIR=$(installed_testdir) \
 	DBUS_TOP_BUILDDIR=$(installed_testdir) \
 	$(NULL)
