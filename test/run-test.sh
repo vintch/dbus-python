@@ -68,10 +68,11 @@ cross_test_server_pid="$!"
 
 $PYTHON "$DBUS_TOP_SRCDIR"/test/wait-for-name.py org.freedesktop.DBus.Binding.TestServer
 
+e=0
 $PYTHON "$DBUS_TOP_SRCDIR"/test/cross-test-client.py > "$DBUS_TEST_TMPDIR"/cross-client.log || e=$?
 echo "test-client exit status: $e"
 
-if test $e = 77; then
+if test "$e" = 77; then
   echo "cross-test-client exited $e, marking as skipped"
   skipped=yes
 elif grep . "$DBUS_TEST_TMPDIR"/cross-client.log >/dev/null; then
@@ -81,7 +82,7 @@ else
   failed=yes
 fi
 
-if test $e = 77; then
+if test "$e" = 77; then
   echo "test-client exited $e, marking as skipped"
   skipped=yes
 elif grep . "$DBUS_TEST_TMPDIR"/cross-server.log >/dev/null; then
