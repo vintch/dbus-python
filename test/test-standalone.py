@@ -28,6 +28,7 @@ run in isolation.
 
 from __future__ import unicode_literals
 
+import struct
 import sys
 import os
 import unittest
@@ -68,6 +69,33 @@ assert (_dbus_bindings._python_version & 0xffff0000
         '_dbus_bindings was compiled for Python %x but this is Python %x, '\
         'a different major version'\
         % (_dbus_bindings._python_version, sys.hexversion)
+
+def uni(x):
+    """Return a Unicode string consisting of the single Unicode character
+    with the given codepoint (represented as a surrogate pair if this is
+    a "narrow" Python build). This is a generalization of unichr().
+
+    uni(0x0001f639) == u'\\U0001f639' in versions where that syntax is
+    supported.
+    """
+    if x <= 0xFFFF:
+        if is_py3:
+            return chr(x)
+        else:
+            return unichr(x)
+    else:
+        return struct.pack('>I', x).decode('utf_32_be')
+
+def utf8(*xs):
+    """Return a bytestring containing the given UTF-8 bytes.
+
+    utf8(0xc2, 0xa3) == b'\\xc2\\xa3' on Python versions that
+    allow bytestring literals (but some Python 2 versions do not).
+    """
+    if is_py3:
+        return bytes(xs)
+    else:
+        return str('').join(map(chr, xs))
 
 class TestTypes(unittest.TestCase):
 
@@ -430,16 +458,7 @@ class TestMessageMarshalling(unittest.TestCase):
 
     def test_utf8(self):
         from _dbus_bindings import SignalMessage
-        if is_py3:
-            def utf8(*xs):
-                return bytes(xs)
-            def uni(x):
-                return chr(x)
-        else:
-            def utf8(*xs):
-                return str('').join(map(chr, xs))
-            def uni(x):
-                return unichr(x)
+
         for bad in [
                 uni(0xD800),
                 utf8(0xed, 0xa0, 0x80),
