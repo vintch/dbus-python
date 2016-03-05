@@ -1,51 +1,37 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
+test -n "$srcdir" || srcdir=$(dirname "$0")
+test -n "$srcdir" || srcdir=.
 
-srcdir=`dirname $0`
-test -z "$srcdir" && srcdir=.
+olddir=$(pwd)
 
-ORIGDIR=`pwd`
 cd $srcdir
 
-PROJECT=dbus-python
-
-test -f dbus-python.pc.in || {
-	echo "You must run this script in the top-level $PROJECT directory">&2
-	exit 1
+(test -f configure.ac) || {
+        echo "*** ERROR: Directory '$srcdir' does not look like the top-level project directory ***"
+        exit 1
 }
 
-(autoreconf --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-	echo "You must have autoconf, automake and libtoolize installed">&2
-	echo "to compile $PROJECT. Download the appropriate packages for">&2
-	echo "your distribution, or get the source tarball at ">&2
-	echo "ftp://ftp.gnu.org/pub/gnu/">&2
-	exit 1
-}
+# shellcheck disable=SC2016
+PKG_NAME=$(autoconf --trace 'AC_INIT:$1' configure.ac)
 
-if test -z "$*"; then
-	echo "I am going to run ./configure with no arguments - if you wish "
-        echo "to pass any to it, please specify them on the $0 command line."
+if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
+        echo "*** WARNING: I am going to run 'configure' with no arguments." >&2
+        echo "*** If you wish to pass any to it, please specify them on the" >&2
+        echo "*** '$0' command line." >&2
+        echo "" >&2
 fi
 
-echo "Running autoreconf -f -i..."
-autoreconf -f -i
+aclocal --install || exit 1
+autoreconf --verbose --force --install || exit 1
 
-cd $ORIGDIR
+cd "$olddir"
+if [ "$NOCONFIGURE" = "" ]; then
+        $srcdir/configure "$@" || exit 1
 
-run_configure=true
-for arg in $*; do
-    case $arg in 
-        --no-configure)
-            run_configure=false
-            ;;
-        *)
-            ;;
-    esac
-done
-
-if $run_configure; then
-    $srcdir/configure --enable-maintainer-mode --config-cache "$@"
-    echo
-    echo "Now run 'make' to compile $PROJECT."
+        if [ "$1" = "--help" ]; then exit 0 else
+                echo "Now type 'make' to compile $PKG_NAME" || exit 1
+        fi
+else
+        echo "Skipping configure process."
 fi
