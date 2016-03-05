@@ -514,6 +514,20 @@ class TestMatching(unittest.TestCase):
         self._message.append('/', signature='o')
         self.assertFalse(self._match.maybe_handle_message(self._message))
 
+class TestVersion(unittest.TestCase):
+    if sys.version_info[:2] < (2, 7):
+        def assertGreater(self, first, second):
+            self.assertTrue(first > second)
+
+        def assertLess(self, first, second):
+            self.assertTrue(first < second)
+
+    def test_version(self):
+        self.assertGreater(dbus.version, (0, 41))
+        self.assertLess(dbus.version, (23, 0))
+        self.assertGreater(dbus.__version__, '0')
+        self.assertLess(dbus.__version__, '9')
+
 if __name__ == '__main__':
     # Python 2.6 doesn't accept a `verbosity` keyword.
     kwargs = {}
