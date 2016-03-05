@@ -27,6 +27,7 @@
 #define DBUS_BINDINGS_INTERNAL_H
 
 #define PY_SSIZE_T_CLEAN 1
+#define PY_SIZE_T_CLEAN 1
 
 #include <Python.h>
 

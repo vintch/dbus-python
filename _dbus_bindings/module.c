@@ -23,10 +23,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "dbus_bindings-internal.h"
+
 #include <Python.h>
 #include <structmember.h>
-
-#include "dbus_bindings-internal.h"
 
 PyDoc_STRVAR(module_doc,
 "Low-level Python bindings for libdbus. Don't use this module directly -\n"

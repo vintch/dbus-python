@@ -24,6 +24,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "dbus_bindings-internal.h"
 
 #include <assert.h>
 

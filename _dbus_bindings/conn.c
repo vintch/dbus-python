@@ -25,6 +25,7 @@
  */
 
 #include "dbus_bindings-internal.h"
+
 #include "conn-internal.h"
 
 /* Connection definition ============================================ */

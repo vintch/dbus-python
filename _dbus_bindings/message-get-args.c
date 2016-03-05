@@ -24,7 +24,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#define PY_SIZE_T_CLEAN 1
+#include "dbus_bindings-internal.h"
 
 #define DBG_IS_TOO_VERBOSE
 #include "compat-internal.h"

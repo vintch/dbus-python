@@ -24,6 +24,7 @@
  */
 
 #include "dbus_bindings-internal.h"
+
 #include "conn-internal.h"
 
 PyObject *

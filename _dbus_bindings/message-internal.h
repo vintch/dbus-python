@@ -23,12 +23,12 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include <Python.h>
+#ifndef DBUS_BINDINGS_MESSAGE_INTERNAL_H
+#define DBUS_BINDINGS_MESSAGE_INTERNAL_H
 
 #include "dbus_bindings-internal.h"
 
-#ifndef DBUS_BINDINGS_MESSAGE_INTERNAL_H
-#define DBUS_BINDINGS_MESSAGE_INTERNAL_H
+#include <Python.h>
 
 typedef struct {
     PyObject_HEAD

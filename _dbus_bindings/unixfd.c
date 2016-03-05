@@ -24,6 +24,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "dbus_bindings-internal.h"
+
 #include "types-internal.h"
 
 PyDoc_STRVAR(UnixFd_tp_doc,

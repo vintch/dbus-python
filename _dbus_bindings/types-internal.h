@@ -23,6 +23,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "dbus_bindings-internal.h"
+
 #include <Python.h>
 
 /* In Python2 >= 2.6 this aliases PyString to PyBytes.  There is no PyString
@@ -35,8 +37,6 @@
 #ifndef PY3
 #include <longintrepr.h>
 #endif
-
-#include "dbus_bindings-internal.h"
 
 #ifndef DBUS_BINDINGS_TYPES_INTERNAL_H
 #define DBUS_BINDINGS_TYPES_INTERNAL_H

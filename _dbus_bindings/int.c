@@ -23,6 +23,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+#include "dbus_bindings-internal.h"
+
 #include "types-internal.h"
 
 #ifdef PY3
