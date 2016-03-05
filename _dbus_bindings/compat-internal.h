@@ -27,7 +27,6 @@
 #ifndef DBUS_BINDINGS_COMPAT_INTERNAL_H
 #define DBUS_BINDINGS_COMPAT_INTERNAL_H
 
-#include "config.h"
 #include "dbus_bindings-internal.h"
 
 #endif

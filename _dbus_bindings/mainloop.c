@@ -24,8 +24,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#include "config.h"
-
 #include "dbus_bindings-internal.h"
 
 /* Native mainloop wrapper ========================================= */

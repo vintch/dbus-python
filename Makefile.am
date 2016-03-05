@@ -36,6 +36,7 @@ EXTRA_DIST = \
 # === C code ===
 
 AM_CPPFLAGS = \
+	-include config.h \
 	-I$(top_srcdir)/include \
 	$(DBUS_CFLAGS) \
 	$(DBUS_GLIB_CFLAGS) \
