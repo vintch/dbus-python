@@ -24,7 +24,7 @@
  */
 
 #include <Python.h>
-#include "dbus-python.h"
+#include <dbus/dbus-python.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 

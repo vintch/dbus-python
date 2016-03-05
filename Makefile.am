@@ -141,8 +141,9 @@ dbus_py_test_la_LDFLAGS = \
 	$(NULL)
 dbus_py_test_la_LIBADD = $(DBUS_LIBS)
 dbus_py_test_la_SOURCES = \
+	include/dbus/dbus-python.h \
 	test/dbus_py_test.c \
-	$(top_srcdir)/include/dbus-python.h
+	$(NULL)
 
 # === dbus package ===
 
@@ -181,7 +182,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = dbus-python.pc
 
 dbusincludedir = $(includedir)/dbus-1.0/dbus
-dbusinclude_HEADERS = include/dbus-python.h
+dbusinclude_HEADERS = include/dbus/dbus-python.h
 
 # === Tests ===
 

@@ -31,7 +31,7 @@
 #include <Python.h>
 
 #define INSIDE_DBUS_PYTHON_BINDINGS
-#include "dbus-python.h"
+#include "dbus/dbus-python.h"
 
 #if defined(__GNUC__)
 #   if __GNUC__ >= 3

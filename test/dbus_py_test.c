@@ -24,7 +24,7 @@
  */
 
 #include <Python.h>
-#include "dbus-python.h"
+#include <dbus/dbus-python.h>
 
 #ifdef PY3
 PyMODINIT_FUNC PyInit_dbus_py_test(void);
