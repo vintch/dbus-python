@@ -1,3 +1,3 @@
 # @configure_input@
 __version__ = "@PACKAGE_VERSION@"
-version = map(int, __version__.split('.'))
+version = tuple(map(int, __version__.split('.')))
