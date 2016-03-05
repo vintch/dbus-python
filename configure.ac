@@ -216,6 +216,5 @@ AC_ARG_ENABLE([coding-style-checks],
 AC_CONFIG_FILES([
   Makefile
   dbus-python.pc
-  dbus/_version.py
 ])
 AC_OUTPUT

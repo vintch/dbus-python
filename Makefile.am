@@ -153,7 +153,6 @@ nobase_python_PYTHON = \
     dbus/connection.py \
     dbus/_compat.py \
     dbus/_dbus.py \
-    dbus/_version.py \
     dbus/decorators.py \
     dbus/exceptions.py \
     dbus/_expat_introspect_parser.py \

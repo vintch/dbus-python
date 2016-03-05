@@ -72,14 +72,12 @@ if is_py2:
 
 __docformat__ = 'restructuredtext'
 
-try:
-    from dbus._version import version, __version__
-except ImportError:
-    pass
-
 # OLPC Sugar compatibility
 import dbus.exceptions as exceptions
 import dbus.types as types
+
+from _dbus_bindings import __version__
+version = tuple(map(int, __version__.split('.')))
 
 from _dbus_bindings import (
     get_default_main_loop, set_default_main_loop, validate_bus_name,
