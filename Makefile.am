@@ -8,10 +8,11 @@ ACLOCAL_AMFLAGS = -I m4
 
 CLEANFILES =
 EXTRA_DIST = \
-	dbus-python.pc.in \
+	.travis.yml \
 	AUTHORS \
 	COPYING \
 	ChangeLog \
+	dbus-python.pc.in \
 	examples/example-async-client.py \
 	examples/example-client.py \
 	examples/example-service.py \
@@ -27,10 +28,11 @@ EXTRA_DIST = \
 	setup.py \
 	test/TestSuitePythonService.service.in \
 	test/tmp-session-bus.conf.in \
-	tools/check-coding-style.mk \
 	tools/check-c-style.sh \
+	tools/check-coding-style.mk \
 	tools/check-py-style.sh \
 	tools/check-whitespace.sh
+	tools/ci-build.sh \
 	$(NULL)
 
 # === C code ===
