@@ -115,3 +115,10 @@ dbus_ci_pyversion="$(${PYTHON:-python} -c 'import distutils.sysconfig; print(dis
 export PYTHONPATH="$prefix/lib/python$dbus_ci_pyversion/site-packages:$PYTHONPATH"
 export XDG_DATA_DIRS="$prefix/share:/usr/local/share:/usr/share"
 gnome-desktop-testing-runner dbus-python
+
+# re-run the tests with dbus-python only installed via pip
+if [ -n "$VIRTUAL_ENV" ]; then
+	rm -fr "${prefix}/lib/python$dbus_ci_pyversion/site-packages"
+	pip install -vvv "${builddir}"/dbus-python-*.tar.gz
+	gnome-desktop-testing-runner dbus-python
+fi
