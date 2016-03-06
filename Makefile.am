@@ -6,7 +6,9 @@ installed_test_metadir = ${datadir}/installed-tests/${PACKAGE_TARNAME}
 
 ACLOCAL_AMFLAGS = -I m4
 
-CLEANFILES =
+CLEANFILES = \
+	test/test-service.log \
+	$(NULL)
 EXTRA_DIST = \
 	.travis.yml \
 	AUTHORS \
