@@ -1,7 +1,36 @@
 D-Bus Python Bindings 1.2.4 (UNRELEASED)
 ========================================
 
-...
+The “75,000 microchips” release.
+
+Enhancements:
+
+• Continous integration metadata for travis-ci.org is now available.
+  Similar to dbus, this is split into .travis.yml (Travis-specifics)
+  and tools/ci-build.sh (intended to be useful for any CI framework,
+  although it does include various workarounds for travis-ci oddities).
+  (Simon McVittie)
+
+Fixes:
+
+• Make dbus.version a tuple again, not a list, for consistent sorting.
+  This was a regression in 1.2.2. (Debian #816729, Simon McVittie)
+
+• Use inspect.signature() instead of inspect.getargspec() on Python
+  versions that have it. inspect.getargspec() is deprecated in recent
+  Python 3 and seems to have disappeared from 3.6 nightly builds.
+  (Simon McVittie)
+
+• Make the tests pass in "narrow" Python builds where unicode objects
+  are UTF-16, rather than the UCS-4 used in Linux distributions.
+  (fd.o #57140, Simon McVittie)
+
+• Always include headers in a consistent order (Debian #749133, Simon McVittie)
+
+• Include config.h in all C code that we compile. This is necessary
+  on platforms where it might contain something like "#define _GNU_SOURCE"
+  or "#define inline __inline".
+  (Simon McVittie)
 
 D-Bus Python Bindings 1.2.2 (2016-02-22)
 ========================================
