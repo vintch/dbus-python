@@ -83,8 +83,11 @@ def uni(x):
             return chr(x)
         else:
             return unichr(x)
-    else:
+    elif is_py3:
         return struct.pack('>I', x).decode('utf_32_be')
+    else:
+        # Python 2.6 didn't accept unicode format strings
+        return struct.pack(b'>I', x).decode('utf_32_be')
 
 def utf8(*xs):
     """Return a bytestring containing the given UTF-8 bytes.
