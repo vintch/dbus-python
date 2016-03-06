@@ -155,7 +155,16 @@ def method(dbus_interface, in_signature=None, out_signature=None,
     validate_interface_name(dbus_interface)
 
     def decorator(func):
-        args = inspect.getargspec(func)[0]
+        if hasattr(inspect, 'Signature'):
+            args = []
+
+            for arg in inspect.signature(func).parameters.values():
+                if arg.kind in (inspect.Parameter.POSITIONAL_ONLY,
+                        inspect.Parameter.POSITIONAL_OR_KEYWORD):
+                    args.append(arg.name)
+        else:
+            args = inspect.getargspec(func)[0]
+
         args.pop(0)
 
         if async_callbacks:
