@@ -89,22 +89,8 @@ def uni(x):
             return chr(x)
         else:
             return unichr(x)
-    elif is_py3:
+    else:
         return struct.pack('>I', x).decode('utf_32_be')
-    else:
-        # Python 2.6 didn't accept unicode format strings
-        return struct.pack(b'>I', x).decode('utf_32_be')
-
-def utf8(*xs):
-    """Return a bytestring containing the given UTF-8 bytes.
-
-    utf8(0xc2, 0xa3) == b'\\xc2\\xa3' on Python versions that
-    allow bytestring literals (but some Python 2 versions do not).
-    """
-    if is_py3:
-        return bytes(xs)
-    else:
-        return str('').join(map(chr, xs))
 
 class TestTypes(unittest.TestCase):
 
@@ -470,7 +456,7 @@ class TestMessageMarshalling(unittest.TestCase):
 
         for bad in [
                 uni(0xD800),
-                utf8(0xed, 0xa0, 0x80),
+                b'\xed\xa0\x80',
                 ]:
             s = SignalMessage('/', 'foo.bar', 'baz')
             try:
@@ -494,27 +480,27 @@ class TestMessageMarshalling(unittest.TestCase):
             s.append(good.encode('utf-8'), signature='s')
         for noncharacter in [
                 uni(0xFDD0),
-                utf8(0xef, 0xb7, 0x90),
+                b'\xef\xb7\x90',
                 uni(0xFDD7),
-                utf8(0xef, 0xb7, 0x97),
+                b'\xef\xb7\x97',
                 uni(0xFDEF),
-                utf8(0xef, 0xb7, 0xaf),
+                b'\xef\xb7\xaf',
                 uni(0xFFFE),
-                utf8(0xef, 0xbf, 0xbe),
+                b'\xef\xbf\xbe',
                 uni(0xFFFF),
-                utf8(0xef, 0xbf, 0xbf),
+                b'\xef\xbf\xbf',
                 uni(0x0001FFFE),
-                utf8(0xf0, 0x9f, 0xbf, 0xbe),
+                b'\xf0\x9f\xbf\xbe',
                 uni(0x0001FFFF),
-                utf8(0xf0, 0x9f, 0xbf, 0xbf),
+                b'\xf0\x9f\xbf\xbf',
                 uni(0x0007FFFE),
-                utf8(0xf1, 0xbf, 0xbf, 0xbe),
+                b'\xf1\xbf\xbf\xbe',
                 uni(0x0007FFFF),
-                utf8(0xf1, 0xbf, 0xbf, 0xbf),
+                b'\xf1\xbf\xbf\xbf',
                 uni(0x0010FFFE),
-                utf8(0xf4, 0x8f, 0xbf, 0xbe),
+                b'\xf4\x8f\xbf\xbe',
                 uni(0x0010FFFF),
-                utf8(0xf4, 0x8f, 0xbf, 0xbf),
+                b'\xf4\x8f\xbf\xbf',
                 ]:
             s = SignalMessage('/', 'foo.bar', 'baz')
             try:
@@ -557,10 +543,6 @@ class TestVersion(unittest.TestCase):
         self.assertLess(dbus.__version__, '9')
 
 if __name__ == '__main__':
-    # Python 2.6 doesn't accept a `verbosity` keyword.
-    kwargs = {}
-    if sys.version_info[:2] >= (2, 7):
-        kwargs['verbosity'] = 2
     runner = TAPTestRunner()
     runner.set_stream(True)
-    unittest.main(testRunner=runner, **kwargs)
+    unittest.main(testRunner=runner, verbosity=2)

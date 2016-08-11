@@ -34,7 +34,7 @@ You've got some dbus-python code that works great in Python 2.  This branch
 should generally allow your existing Python 2 code to continue to work
 unchanged.  There are a few changes you'll notice in Python 2 though:
 
- - The minimum supported Python 2 version is 2.6.
+ - The minimum supported Python 2 version is 2.7.
  - All object reprs are unicodes.  This change was made because it greatly
    simplifies the implementation and cross-compatibility with Python 3.
  - Some exception strings have changed.
@@ -209,8 +209,6 @@ any return path.
  - `isSequenceType()` is gone in Python 3, so I use a different idiom there.
  - `__next__()` vs. `next()`
  - `PyUnicode_FromFormat()` `%V` flag is a clever hack!
- - `sys.version_info` is a tuple in Python 2.6, not a namedtuple.  i.e. there
-   is no `sys.version_info.major`
  - `PyArg_Parse()`: No 'y' code in Python 2; in Python 3, no equivalent of 'z'
    for bytes objects.
 

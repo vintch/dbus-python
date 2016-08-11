@@ -63,7 +63,7 @@ AC_PROG_MKDIR_P
 AC_PROG_AWK
 AC_REQUIRE_AUX_FILE([tap-driver.sh])
 
-AM_PATH_PYTHON([2.6])
+AM_PATH_PYTHON([2.7])
 
 AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 
