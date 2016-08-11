@@ -1,7 +1,10 @@
 D-Bus Python Bindings 1.2.6 (UNRELEASED)
 ========================================
 
-...
+Dependencies:
+
+• Most unit tests now require the tap.py module from PyPI. Use version 1.9
+  or older if you are still running Python 2.6.
 
 D-Bus Python Bindings 1.2.4 (2016-03-06)
 ========================================

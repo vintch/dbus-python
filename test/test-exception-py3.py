@@ -3,6 +3,12 @@
 
 import unittest
 
+try:
+    from tap.runner import TAPTestRunner
+except ImportError:
+    print('1..0 # SKIP cannot import TAPTestRunner')
+    raise SystemExit(0)
+
 import dbus
 
 # from test-service.py
@@ -28,4 +34,6 @@ class DBusExceptionTestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    runner = TAPTestRunner()
+    runner.set_stream(True)
+    unittest.main(testRunner=runner)

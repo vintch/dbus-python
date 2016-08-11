@@ -23,18 +23,25 @@
 # DEALINGS IN THE SOFTWARE.
 
 from __future__ import print_function
+
+import unittest
+
+try:
+    from tap.runner import TAPTestRunner
+except ImportError:
+    print('1..0 # SKIP cannot import TAPTestRunner')
+    raise SystemExit(0)
+
 import dbus
 
 from dbus_py_test import UnusableMainLoop
 
-def main():
-    UnusableMainLoop(set_as_default=True)
-    try:
-        bus = dbus.SessionBus()
-    except ValueError as e:
-        print("Correctly got ValueError from UnusableMainLoop")
-    else:
-        raise AssertionError("Expected ValueError from UnusableMainLoop")
+class Test(unittest.TestCase):
+    def test_unusable_main_loop(self):
+        UnusableMainLoop(set_as_default=True)
+        self.assertRaises(ValueError, lambda: dbus.SessionBus())
 
 if __name__ == '__main__':
-    main()
+    runner = TAPTestRunner()
+    runner.set_stream(True)
+    unittest.main(testRunner=runner)

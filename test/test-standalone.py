@@ -33,6 +33,12 @@ import sys
 import os
 import unittest
 
+try:
+    from tap.runner import TAPTestRunner
+except ImportError:
+    print('1..0 # SKIP cannot import TAPTestRunner')
+    raise SystemExit(0)
+
 import _dbus_bindings
 import dbus
 import dbus.lowlevel as lowlevel
@@ -555,4 +561,6 @@ if __name__ == '__main__':
     kwargs = {}
     if sys.version_info[:2] >= (2, 7):
         kwargs['verbosity'] = 2
-    unittest.main(**kwargs)
+    runner = TAPTestRunner()
+    runner.set_stream(True)
+    unittest.main(testRunner=runner, **kwargs)

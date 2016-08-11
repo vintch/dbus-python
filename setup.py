@@ -105,4 +105,5 @@ setup(
         'build_py': BuildPy,
         'build_ext': BuildExt,
     },
+    tests_require=['tap.py'],
 )
