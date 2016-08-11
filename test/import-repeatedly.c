@@ -12,7 +12,10 @@ int main(void)
 
     for (i = 0; i < 100; ++i) {
         Py_Initialize();
-        PyRun_SimpleString("import dbus\n");
+        if (PyRun_SimpleString("import dbus\n") != 0) {
+            puts("not ok 1 - there was an exception");
+            return 1;
+        }
         Py_Finalize();
     }
 
