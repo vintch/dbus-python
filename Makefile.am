@@ -210,6 +210,10 @@ AM_TESTS_ENVIRONMENT = \
 
 TEST_EXTENSIONS = .sh .py
 
+LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/build-aux/tap-driver.sh
+SH_LOG_DRIVER = $(LOG_DRIVER)
+PY_LOG_DRIVER = $(LOG_DRIVER)
+
 if HAVE_DBUS_RUN_SESSION
 LOG_COMPILER = $(DBUS_RUN_SESSION) \
 	--config-file=$(top_builddir)/test/tmp-session-bus.conf \
