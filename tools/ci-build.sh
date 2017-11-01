@@ -96,12 +96,17 @@ fi
 
 NOCONFIGURE=1 ./autogen.sh
 
+e=0
 (
 	cd "$builddir" && "${srcdir}/configure" \
 		--enable-installed-tests \
 		--prefix="$prefix" \
 		${NULL}
-)
+) || e=1
+if [ "x$e" != x0 ] || [ -n "$TRAVIS" ]; then
+	cat "$builddir/config.log"
+fi
+test "x$e" = x0
 
 make="make -j${dbus_ci_parallel} V=1 VERBOSE=1"
 
