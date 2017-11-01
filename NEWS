@@ -9,6 +9,16 @@ Dependencies:
   Python 3.2 security support ended in 2016.
 • Most unit tests now require the tap.py module from PyPI.
 
+Enhancements:
+
+• AX_PYTHON_DEVEL is now used to find the CPPFLAGS, LDFLAGS and libraries
+  needed to link test-import-repeatedly to libpython, which should reduce
+  the number of wheels reinvented here.
+
+• Remove workarounds for Python 2.6 limitations
+
+• All unit tests now produce structured output (TAP)
+
 D-Bus Python Bindings 1.2.4 (2016-03-06)
 ========================================
 
