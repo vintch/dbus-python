@@ -45,7 +45,7 @@ install:
     fi
   - >
     wget
-    http://httpredir.debian.org/debian/pool/main/a/autoconf-archive/autoconf-archive_20150925-1_all.deb
+    http://httpredir.debian.org/debian/pool/main/a/autoconf-archive/autoconf-archive_20160916-1_all.deb
   - 'sudo dpkg -i autoconf-archive_*_all.deb'
   - 'rm autoconf-archive_*_all.deb'
   - test -n "$dbus_ci_system_python" || pip install tap.py
