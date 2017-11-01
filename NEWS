@@ -3,8 +3,10 @@ D-Bus Python Bindings 1.2.6 (UNRELEASED)
 
 Dependencies:
 
-• Python ≥ 2.7 is now required. Python 2.6 security support ended
-  in 2013, so if you are still using it, please upgrade.
+• When using Python 2, version 2.7 is now required. Python 2.6 security
+  support ended in 2013.
+• When using Python 3, version 3.3 or later is now required.
+  Python 3.2 security support ended in 2016.
 • Most unit tests now require the tap.py module from PyPI.
 
 D-Bus Python Bindings 1.2.4 (2016-03-06)
