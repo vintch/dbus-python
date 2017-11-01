@@ -42,7 +42,7 @@ if [ -n "$TRAVIS" ] && [ -n "$dbus_ci_system_python" ]; then
 	unset PYTHON_CONFIGURE_OPTS
 	unset VIRTUAL_ENV
 	export PATH=/usr/bin:/bin
-	PYTHON="$(command -v "$dbus_ci_system_python")"
+	export PYTHON="$(command -v "$dbus_ci_system_python")"
 elif [ -n "$TRAVIS_PYTHON_VERSION" ]; then
 	# Possibly in a virtualenv
 	dbus_ci_bindir="$(python -c 'import sys; print(sys.prefix)')"/bin
