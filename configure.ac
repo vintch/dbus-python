@@ -63,9 +63,21 @@ AC_PROG_MKDIR_P
 AC_PROG_AWK
 AC_REQUIRE_AUX_FILE([tap-driver.sh])
 
-AM_PATH_PYTHON([2.7])
+AC_ARG_VAR([PYTHON_CPPFLAGS],
+  [compiler flags to find Python headers [default: auto-detect] [typical value: -I/opt/mypython/include]])
+AC_ARG_VAR([PYTHON_LIBS],
+  [libraries to link into Python extensions [default: auto-detect] [typical value: -L/opt/mypython/lib -lpython2.7]])
+AC_ARG_VAR([PYTHON_EXTRA_LIBS],
+  [libraries to link when embedding a Python interpreter [default: auto-detect]])
+AC_ARG_VAR([PYTHON_EXTRA_LDFLAGS],
+  [compiler flags to link when embedding a Python interpreter [default: auto-detect]])
 
-AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
+AC_ARG_VAR([PYTHON_INCLUDES], [deprecated form of PYTHON_CPPFLAGS])
+AS_IF([test -n "$PYTHON_INCLUDES"],
+  [PYTHON_CPPFLAGS="$PYTHON_CPPFLAGS $PYTHON_INCLUDES"])
+
+AX_PYTHON_DEVEL([>= '2.7'])
+AM_PATH_PYTHON
 
 # This command exits 0 (success) if sys.version >= "3", or 1 (failure)
 # if sys.version < "3" (i.e. starts with "2").
@@ -74,19 +86,6 @@ AM_CONDITIONAL([HAVE_PYTHON_3],
 
 PLATFORM=`$PYTHON -c "from __future__ import print_function; from distutils import util; print(util.get_platform())"`
 AC_SUBST(PLATFORM)
-
-AC_ARG_VAR([PYTHON_LIBS],
-  [LDFLAGS for Python, overriding output of python2.x-config --ldflags, e.g. "-L/opt/misc/lib -lpython2.7"])
-AS_IF([test "${PYTHON_LIBS+set}" = set],
-  [AC_MSG_NOTICE([PYTHON_LIBS overridden to: $PYTHON_LIBS])],
-  dnl else
-  [
-  AC_MSG_CHECKING([for Python library linker flags using ${PYTHON_CONFIG}])
-  PYTHON_LIBS="$($PYTHON_CONFIG --ldflags)"
-  AC_MSG_RESULT([$PYTHON_LIBS])
-  ])
-
-AC_SUBST([PYTHON_LIBS])
 
 AC_ARG_ENABLE([installed-tests],
   [AC_HELP_STRING([--enable-installed tests],
