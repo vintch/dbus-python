@@ -23,12 +23,17 @@
 sudo: required
 dist: trusty
 language: python
+cache:
+  pip: true
+  directories:
+    - $HOME/.ccache
 install:
   - 'sudo apt-get -qq -y update'
   - >
     sudo apt-get -qq -y install
     autoconf
     automake
+    ccache
     dbus
     gnome-desktop-testing
     libdbus-1-dev
@@ -62,7 +67,7 @@ python:
   - "3.6-dev"
   - "nightly"
 script:
-  - ./tools/ci-build.sh
+  - PATH="/usr/lib/ccache:$PATH" ./tools/ci-build.sh
 
 matrix:
   include:
