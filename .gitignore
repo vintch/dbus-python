@@ -29,6 +29,7 @@
 /dbus-python-*.tar.gz.asc
 /dbus-python.pc
 /dbus/.doc-needs-rebuild-stamp
+/dbus/_version.py
 /depcomp
 /install-sh
 /libtool
