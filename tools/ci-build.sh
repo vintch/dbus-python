@@ -43,6 +43,18 @@ if [ -n "$TRAVIS" ] && [ -n "$dbus_ci_system_python" ]; then
 	unset VIRTUAL_ENV
 	export PATH=/usr/bin:/bin
 	export PYTHON="$(command -v "$dbus_ci_system_python")"
+
+	case "$dbus_ci_system_python" in
+		(python-dbg|python2.7-dbg)
+			# This is a workaround. Python 2 doesn't have the
+			# LDVERSION sysconfig variable, which would give
+			# AX_PYTHON_DEVEL the information it needs to know
+			# that it should link -lpython2.7_d and not
+			# -lpython2.7.
+			export PYTHON_LIBS="-lpython${TRAVIS_PYTHON_VERSION}_d"
+			;;
+	esac
+
 elif [ -n "$TRAVIS_PYTHON_VERSION" ]; then
 	# Possibly in a virtualenv
 	dbus_ci_bindir="$(python -c 'import sys; print(sys.prefix)')"/bin
