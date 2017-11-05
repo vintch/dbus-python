@@ -22,13 +22,16 @@ Enhancements:
 Fixes:
 
 • Fix a NULL dereference in constructing a Server if the underlying C
-  function fails (Simon McVittie)
+  function fails
 
 • Silence compiler warnings triggered by the Python headers under gcc 7
-  (Simon McVittie)
 
 • Avoid __gtype__ appearing in documentation, for reproducible builds
-  (Simon McVittie)
+
+• Rename _dbus_bindings/ and _dbus_glib_bindings/ source directories to
+  dbus_bindings/ and dbus_glib_bindings/ to avoid an ImportWarning
+  appearing in the API documentation, which made the documentation build
+  non-reproducible
 
 D-Bus Python Bindings 1.2.4 (2016-03-06)
 ========================================
