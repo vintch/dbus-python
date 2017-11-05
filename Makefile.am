@@ -93,34 +93,34 @@ _dbus_bindings_la_LIBADD = \
 	$(DBUS_LIBS) \
 	$(NULL)
 _dbus_bindings_la_SOURCES = \
-	_dbus_bindings/abstract.c \
-	_dbus_bindings/bus.c \
-	_dbus_bindings/bytes.c \
-	_dbus_bindings/compat-internal.h \
-	_dbus_bindings/conn.c \
-	_dbus_bindings/conn-internal.h \
-	_dbus_bindings/conn-methods.c \
-	_dbus_bindings/containers.c \
-	_dbus_bindings/dbus_bindings-internal.h \
-	_dbus_bindings/debug.c \
-	_dbus_bindings/exceptions.c \
-	_dbus_bindings/float.c \
-	_dbus_bindings/generic.c \
-	_dbus_bindings/int.c \
-	_dbus_bindings/unixfd.c \
-	_dbus_bindings/libdbusconn.c \
-	_dbus_bindings/mainloop.c \
-	_dbus_bindings/message-append.c \
-	_dbus_bindings/message.c \
-	_dbus_bindings/message-get-args.c \
-	_dbus_bindings/message-internal.h \
-	_dbus_bindings/module.c \
-	_dbus_bindings/pending-call.c \
-	_dbus_bindings/server.c \
-	_dbus_bindings/signature.c \
-	_dbus_bindings/string.c \
-	_dbus_bindings/types-internal.h \
-	_dbus_bindings/validation.c \
+	dbus_bindings/abstract.c \
+	dbus_bindings/bus.c \
+	dbus_bindings/bytes.c \
+	dbus_bindings/compat-internal.h \
+	dbus_bindings/conn.c \
+	dbus_bindings/conn-internal.h \
+	dbus_bindings/conn-methods.c \
+	dbus_bindings/containers.c \
+	dbus_bindings/dbus_bindings-internal.h \
+	dbus_bindings/debug.c \
+	dbus_bindings/exceptions.c \
+	dbus_bindings/float.c \
+	dbus_bindings/generic.c \
+	dbus_bindings/int.c \
+	dbus_bindings/unixfd.c \
+	dbus_bindings/libdbusconn.c \
+	dbus_bindings/mainloop.c \
+	dbus_bindings/message-append.c \
+	dbus_bindings/message.c \
+	dbus_bindings/message-get-args.c \
+	dbus_bindings/message-internal.h \
+	dbus_bindings/module.c \
+	dbus_bindings/pending-call.c \
+	dbus_bindings/server.c \
+	dbus_bindings/signature.c \
+	dbus_bindings/string.c \
+	dbus_bindings/types-internal.h \
+	dbus_bindings/validation.c \
 	$(NULL)
 
 _dbus_glib_bindings_la_LDFLAGS = \
@@ -134,7 +134,7 @@ _dbus_glib_bindings_la_LIBADD = \
 	$(DBUS_GLIB_LIBS) \
 	$(NULL)
 _dbus_glib_bindings_la_SOURCES = \
-	_dbus_glib_bindings/module.c \
+	dbus_glib_bindings/module.c \
 	$(NULL)
 
 # unconditionally add an -rpath to force Libtool to build a shared library

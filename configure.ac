@@ -30,7 +30,7 @@ AC_SUBST(DBUS_PYTHON_MINOR_VERSION, dbus_python_minor_version)
 AC_DEFINE(DBUS_PYTHON_MICRO_VERSION, dbus_python_micro_version, [dbus-python micro version])
 AC_SUBST(DBUS_PYTHON_MICRO_VERSION, dbus_python_micro_version)
 
-AC_CONFIG_SRCDIR([_dbus_bindings/module.c])
+AC_CONFIG_SRCDIR([dbus_bindings/module.c])
 AC_CONFIG_HEADERS(config.h)
 
 AM_INIT_AUTOMAKE([1.13 -Wno-portability subdir-objects tar-ustar])

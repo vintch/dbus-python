@@ -76,9 +76,9 @@ class BuildPy(Distribution().get_command_class('build_py')):
         pass
 
 dbus_bindings = Extension('_dbus_bindings',
-        sources=['_dbus_bindings/module.c'])
+        sources=['dbus_bindings/module.c'])
 dbus_glib_bindings = Extension('_dbus_glib_bindings',
-        sources=['_dbus_glib_bindings/module.c'])
+        sources=['dbus_glib_bindings/module.c'])
 
 setup(
     name='dbus-python',
