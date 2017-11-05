@@ -411,6 +411,11 @@ Server_tp_new(PyTypeObject *cls, PyObject *args, PyObject *kwargs)
 
     self = DBusPyServer_NewConsumingDBusServer(cls, server, conn_class,
             mainloop, auth_mechanisms);
+
+    if (!self) {
+        return NULL;
+    }
+
     ((Server *)self)->weaklist = NULL;
     TRACE(self);
 
