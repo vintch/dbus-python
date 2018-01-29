@@ -155,8 +155,7 @@ AS_IF([test "${enable_api_docs}" != no],
 
 AC_ARG_VAR([DBUS_RUN_SESSION],
   [The dbus-run-session tool from dbus 1.8 or later])
-AC_PATH_PROG([DBUS_RUN_SESSION], [dbus-run-session], [false])
-AM_CONDITIONAL([HAVE_DBUS_RUN_SESSION], [test "$DBUS_RUN_SESSION" != false])
+AC_PATH_PROG([DBUS_RUN_SESSION], [dbus-run-session], [dbus-run-session])
 
 RST2HTMLFLAGS=
 AS_IF([test "${enable_html_docs}" != no],

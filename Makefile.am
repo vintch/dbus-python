@@ -213,21 +213,12 @@ LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/build-aux/tap-driver
 SH_LOG_DRIVER = $(LOG_DRIVER)
 PY_LOG_DRIVER = $(LOG_DRIVER)
 
-if HAVE_DBUS_RUN_SESSION
 LOG_COMPILER = $(DBUS_RUN_SESSION) \
 	--config-file=$(top_builddir)/test/tmp-session-bus.conf \
 	--
 installed_log_compiler = $(DBUS_RUN_SESSION) \
 	--config-file=$(installed_testdir)/test/tmp-session-bus.conf \
 	--
-else
-LOG_COMPILER = $(top_srcdir)/test/with-session-bus.sh \
-	--config-file=$(top_builddir)/test/tmp-session-bus.conf \
-	--
-installed_log_compiler = $(installed_testdir)/test/with-session-bus.sh \
-	--config-file=$(installed_testdir)/test/tmp-session-bus.conf \
-	--
-endif
 
 installed_log_compiler += \
 	env \
