@@ -12,8 +12,8 @@ Dependencies:
   1.8 or later.
 • Most unit tests now require the tap.py module from PyPI.
 • The deprecated dbus-glib library is no longer required. A bundled copy
-  of its main loop integration code is included instead. GLib is still
-  required for compilation.
+  of its main loop integration code is included instead.
+• GLib version 2.40 or later is required.
 
 Enhancements:
 
