@@ -104,6 +104,10 @@ EOF
 		$(pkg-config --cflags --libs dbus-1) \
 		${NULL}
 	export PATH="${drsdir}:$PATH"
+
+	# Force the build to be run even though dbus is less than version 1.8.
+	export DBUS_CFLAGS="$(pkg-config --cflags dbus-1)"
+	export DBUS_LIBS="$(pkg-config --libs dbus-1)"
 fi
 
 NOCONFIGURE=1 ./autogen.sh

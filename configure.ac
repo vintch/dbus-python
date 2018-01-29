@@ -187,7 +187,7 @@ AC_SUBST([RST2HTMLFLAGS])
 AM_CONDITIONAL([ENABLE_API_DOCS], [test "$enable_api_docs" != no])
 AM_CONDITIONAL([ENABLE_DOCS], [test "$enable_html_docs" != no])
 
-PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.6])
+PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.8])
 PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.40])
 
 AX_COMPILER_FLAGS([WARN_CFLAGS],

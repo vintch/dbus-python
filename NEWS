@@ -8,12 +8,11 @@ Dependencies:
 • When using Python 3, version 3.4 or later is now required.
   Python 3.2 security support ended in 2016, and Python 3.3 security
   support ended in 2017.
-• Unit tests now require the dbus-run-session tool from dbus version
-  1.8 or later.
 • Most unit tests now require the tap.py module from PyPI.
 • The deprecated dbus-glib library is no longer required. A bundled copy
   of its main loop integration code is included instead.
 • GLib version 2.40 or later is required.
+• libdbus version 1.8 or later is required.
 
 Enhancements:
 
