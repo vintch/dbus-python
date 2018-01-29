@@ -1,5 +1,7 @@
-D-Bus Python Bindings 1.2.6 (UNRELEASED)
+D-Bus Python Bindings 1.2.6 (2018-01-29)
 ========================================
+
+The “doppler radar” release.
 
 Dependencies:
 
