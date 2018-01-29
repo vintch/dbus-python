@@ -60,8 +60,6 @@ install:
   - test -z "$dbus_ci_system_python" || deactivate
   - test -z "$dbus_ci_system_python" || pip install --user tap.py
 python:
-  - "2.7"
-  - "3.4"
   - "3.5"
   - "3.5-dev"
   - "3.6"
