@@ -25,8 +25,7 @@
 
 #include <Python.h>
 #include <dbus/dbus-python.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
+#include <dbus-gmain/dbus-gmain.h>
 
 #ifdef PY3
 PyMODINIT_FUNC PyInit__dbus_glib_bindings(void);
@@ -49,7 +48,7 @@ dbus_py_glib_set_up_conn(DBusConnection *conn, void *data)
 {
     GMainContext *ctx = (GMainContext *)data;
     Py_BEGIN_ALLOW_THREADS
-    dbus_connection_setup_with_g_main(conn, ctx);
+    _dbus_py_glib_set_up_connection(conn, ctx);
     Py_END_ALLOW_THREADS
     return 1;
 }
@@ -59,7 +58,7 @@ dbus_py_glib_set_up_srv(DBusServer *srv, void *data)
 {
     GMainContext *ctx = (GMainContext *)data;
     Py_BEGIN_ALLOW_THREADS
-    dbus_server_setup_with_g_main(srv, ctx);
+    _dbus_py_glib_set_up_server(srv, ctx);
     Py_END_ALLOW_THREADS
     return 1;
 }
@@ -161,7 +160,7 @@ PyDoc_STRVAR(gthreads_init__doc__,
 static PyObject *
 gthreads_init (PyObject *always_null UNUSED, PyObject *no_args UNUSED)
 {
-    dbus_g_thread_init();
+    dbus_threads_init_default();
     Py_RETURN_NONE;
 }
 

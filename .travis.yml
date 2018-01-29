@@ -37,7 +37,6 @@ install:
     dbus
     gnome-desktop-testing
     libdbus-1-dev
-    libdbus-glib-1-dev
     libtool
   - >
     test -z "$dbus_ci_system_python" || sudo apt-get -qq -y install

@@ -187,7 +187,7 @@ AM_CONDITIONAL([ENABLE_API_DOCS], [test "$enable_api_docs" != no])
 AM_CONDITIONAL([ENABLE_DOCS], [test "$enable_html_docs" != no])
 
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.6])
-PKG_CHECK_MODULES(DBUS_GLIB, [dbus-glib-1 >= 0.70])
+PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.40])
 
 AX_COMPILER_FLAGS([WARN_CFLAGS],
   [WARN_LDFLAGS], [],
@@ -216,8 +216,14 @@ AC_ARG_ENABLE([coding-style-checks],
   [ENABLE_CODING_STYLE_CHECKS=$enableval],
   [ENABLE_CODING_STYLE_CHECKS=$ax_is_release])
 
+# Make dbus-gmain submodule part of dbus-python's namespace
+AH_BOTTOM([
+#define DBUS_GMAIN_FUNCTION_NAME(name) _dbus_py_glib_ ## name
+])
+
 AC_CONFIG_FILES([
   Makefile
+  dbus-gmain/Makefile
   dbus-python.pc
 ])
 AC_OUTPUT

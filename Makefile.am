@@ -5,6 +5,7 @@ installed_test_testdir = ${installed_testdir}/test
 installed_test_metadir = ${datadir}/installed-tests/${PACKAGE_TARNAME}
 
 ACLOCAL_AMFLAGS = -I m4
+SUBDIRS = dbus-gmain .
 
 CLEANFILES = \
 	test/test-service.log \
@@ -42,7 +43,7 @@ AM_CPPFLAGS = \
 	-include config.h \
 	-I$(top_srcdir)/include \
 	$(DBUS_CFLAGS) \
-	$(DBUS_GLIB_CFLAGS) \
+	$(GLIB_CFLAGS) \
 	$(PYTHON_CPPFLAGS) \
 	$(NULL)
 AM_CFLAGS = \
@@ -123,15 +124,18 @@ _dbus_bindings_la_SOURCES = \
 	dbus_bindings/validation.c \
 	$(NULL)
 
+dbus-gmain/libdbus-gmain.la:
+	$(MAKE) -C dbus-gmain
+
 _dbus_glib_bindings_la_LDFLAGS = \
 	$(pymod_ldflags) \
 	-export-symbols-regex \(PyInit__\|init_\)dbus_glib_bindings \
 	$(AM_LDFLAGS) \
 	$(NULL)
 _dbus_glib_bindings_la_LIBADD = \
+	dbus-gmain/libdbus-gmain.la \
 	$(pymod_libadd) \
 	$(DBUS_LIBS) \
-	$(DBUS_GLIB_LIBS) \
 	$(NULL)
 _dbus_glib_bindings_la_SOURCES = \
 	dbus_glib_bindings/module.c \
