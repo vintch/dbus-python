@@ -334,12 +334,12 @@ class TestDBusBindings(unittest.TestCase):
 
     def testAsyncMethods(self):
         print("\n********* Testing asynchronous method implementation *******")
-        for async in (True, False):
+        for async_ in (True, False):
             for fail in (True, False):
                 try:
                     val = ('a', 1, False, [1,2], {1:2})
-                    print("calling AsynchronousMethod with %s %s %s" % (async, fail, val))
-                    ret = self.iface.AsynchronousMethod(async, fail, val)
+                    print("calling AsynchronousMethod with %s %s %s" % (async_, fail, val))
+                    ret = self.iface.AsynchronousMethod(async_, fail, val)
                 except Exception as e:
                     self.assertTrue(fail, '%s: %s' % (e.__class__, e))
                     print("Expected failure: %s: %s" % (e.__class__, e))

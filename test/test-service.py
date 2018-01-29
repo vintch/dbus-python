@@ -275,9 +275,9 @@ class TestObject(dbus.service.Object, TestInterface):
 
     @dbus.service.method(IFACE, in_signature='bbv', out_signature='v', 
                          async_callbacks=('return_cb', 'error_cb'))
-    def AsynchronousMethod(self, async, fail, variant, return_cb, error_cb):
+    def AsynchronousMethod(self, async_, fail, variant, return_cb, error_cb):
         try:
-            if async:
+            if async_:
                 GObject.timeout_add(500, self.AsynchronousMethod, False, fail,
                                     variant, return_cb, error_cb)
                 return
