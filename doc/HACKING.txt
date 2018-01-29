@@ -20,6 +20,12 @@ Anonymous access
 Committer access (requires freedesktop.org shell account)
     ``git clone git+ssh://git.freedesktop.org/git/dbus/dbus-python``
 
+dbus-gmain is maintained via `git subtree`. To update, assuming you have
+a checkout of the dbus-gmain branch of the dbus-glib repository in
+../dbus-gmain::
+
+    git subtree pull -P dbus-gmain ../dbus-gmain HEAD
+
 Modules
 =======
 
