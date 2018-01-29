@@ -32,6 +32,7 @@ AC_SUBST(DBUS_PYTHON_MICRO_VERSION, dbus_python_micro_version)
 
 AC_CONFIG_SRCDIR([dbus_bindings/module.c])
 AC_CONFIG_HEADERS(config.h)
+AC_USE_SYSTEM_EXTENSIONS
 
 AM_INIT_AUTOMAKE([1.13 -Wno-portability subdir-objects tar-ustar])
 
@@ -199,7 +200,6 @@ AX_COMPILER_FLAGS([WARN_CFLAGS],
    -Wno-redundant-decls \
    -Wno-switch-default \
    -Wno-write-strings \
-   -std=c9x \
   ])
 dnl AX_COMPILER_FLAGS doesn't order the compiler flags correctly to be able
 dnl to disable flags that it would normally enable
