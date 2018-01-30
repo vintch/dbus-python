@@ -336,18 +336,21 @@ installed_test_metadata = \
 CLEANFILES += $(installed_test_metadata)
 
 $(patsubst %,%.test,$(dist_test_py)): %.test: Makefile
+	@$(MKDIR_P) $(dir $@)
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
 	echo 'Exec=$(installed_log_compiler) $(PYTHON) $(installed_testdir)/$*' >> $@.tmp; \
 	mv $@.tmp $@)
 
 $(patsubst %,%.test,$(dist_test_sh)): %.test: Makefile
+	@$(MKDIR_P) $(dir $@)
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
 	echo 'Exec=$(installed_log_compiler) $(installed_testdir)/$*' >> $@.tmp; \
 	mv $@.tmp $@)
 
 $(patsubst %,%.test,$(test_programs)): %.test: Makefile
+	@$(MKDIR_P) $(dir $@)
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
 	echo 'Type=session' >> $@.tmp; \
 	echo 'Exec=$(installed_log_compiler) $(installed_testdir)/$*$(EXEEXT)' >> $@.tmp; \
