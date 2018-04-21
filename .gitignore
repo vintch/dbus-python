@@ -30,7 +30,9 @@
 /dbus-python.pc
 /dbus/.doc-needs-rebuild-stamp
 /dbus/_version.py
+/dbus_python.egg-info/
 /depcomp
+/dist/
 /install-sh
 /libtool
 /ltmain.sh
