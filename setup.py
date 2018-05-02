@@ -84,6 +84,7 @@ setup(
     name='dbus-python',
     version=version,
     description='Python bindings for libdbus',
+    long_description=open('README').read(),
     maintainer='The D-Bus maintainers',
     maintainer_email='dbus@lists.freedesktop.org',
     download_url='http://dbus.freedesktop.org/releases/dbus-python/',
