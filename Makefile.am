@@ -27,7 +27,6 @@ EXTRA_DIST = \
 	examples/list-system-services.py \
 	examples/unix-fd-client.py \
 	examples/unix-fd-service.py \
-	m4/dbus-py-add-rst2htmlflag.m4 \
 	setup.py \
 	test/TestSuitePythonService.service.in \
 	test/tmp-session-bus.conf.in \
@@ -390,33 +389,6 @@ maintainer-upload:
 	rsync -tvpP --chmod=ugo=r $(DIST_ARCHIVES) $(DIST_ARCHIVES:%=%.asc) \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/releases/dbus-python/
 
-maintainer-update-website: _maintainer-update-apidocs \
-	_maintainer-update-htmldocs
-
-if ENABLE_DOCS
-_maintainer-update-htmldocs: $(HTML_TXT_RSTDOCS) $(HTML_RSTDOCS)
-	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc \
-	$(patsubst %,$(srcdir)/%,$(RSTDOCS)) $(HTML_RSTDOCS) \
-	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
-
-HTML_TXT_RSTDOCS = $(patsubst %.txt,%.html,$(TXT_RSTDOCS))
-HTML_RSTDOCS = $(patsubst %,%.html,$(RSTDOCS))
-nodist_doc_DATA = $(HTML_TXT_RSTDOCS) $(HTML_RSTDOCS)
-
-CLEANFILES += $(nodist_doc_DATA)
-
-$(HTML_TXT_RSTDOCS) : %.html: %.txt
-	$(INSTALL) -d doc
-	$(RST2HTML) $(RST2HTMLFLAGS) $< $@
-$(HTML_RSTDOCS) : %.html: %
-	$(RST2HTML) $(RST2HTMLFLAGS) $< $@
-else
-_maintainer-update-htmldocs:
-	@echo "*** Not updating the HTML docs on the website - install rst2html"
-	@echo "*** from http://docutils.sourceforge.net/ and configure with "
-	@echo "*** --enable-html-docs"
-endif
-
 sphinx_sources = \
 	doc/API_CHANGES.txt \
 	doc/conf.py \
@@ -446,7 +418,7 @@ sphinx_sources = \
 	$(NULL)
 EXTRA_DIST += $(sphinx_sources)
 
-if ENABLE_API_DOCS
+if ENABLE_DOCUMENTATION
 all: doc/_build/stamp
 
 doc/_build/stamp: $(nobase_python_PYTHON) \
@@ -465,11 +437,11 @@ doc/_build/stamp: $(nobase_python_PYTHON) \
 	$(PYTHON) $(srcdir)/doc/redirects.py
 	touch $@
 
-_maintainer-update-apidocs: doc/_build/stamp
+maintainer-update-website: doc/_build/stamp
 	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
 else
-_maintainer-update-apidocs:
+maintainer-update-website:
 	@echo "*** Not updating the API docs on the website - install sphinx"
 	@echo "*** and configure with --enable-api-docs"
 endif
@@ -486,5 +458,4 @@ include $(top_srcdir)/tools/check-coding-style.mk
 
 .PHONY: cross-test-compile cross-test-server cross-test-client \
 	always-rebuild maintainer-update-website \
-	_maintainer-update-apidocs _maintainer-update-htmldocs \
 	maintainer-upload

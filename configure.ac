@@ -121,34 +121,7 @@ AC_ARG_VAR([DBUS_RUN_SESSION],
   [The dbus-run-session tool from dbus 1.8 or later])
 AC_PATH_PROG([DBUS_RUN_SESSION], [dbus-run-session], [dbus-run-session])
 
-RST2HTMLFLAGS=
-AS_IF([test "${enable_html_docs}" != no],
-  [
-  AC_CHECK_PROGS([RST2HTML], [rst2html rst2html.py], [])
-  AS_IF([test -z "$RST2HTML"],
-    [
-    AS_CASE(["$enable_html_docs"],
-      [if*possible],
-        [enable_html_docs=no],
-      [*],
-        [AC_MSG_ERROR([cannot compile HTML documentation without rst2html installed])])
-    ])
-  ],
-  [
-    DBUS_PY_ADD_RST2HTMLFLAG([--generator])
-    DBUS_PY_ADD_RST2HTMLFLAG([--date])
-    DBUS_PY_ADD_RST2HTMLFLAG([--time])
-    DBUS_PY_ADD_RST2HTMLFLAG([--exit-status=2])
-    DBUS_PY_ADD_RST2HTMLFLAG([--no-raw])
-    DBUS_PY_ADD_RST2HTMLFLAG([--no-file-insertion])
-    DBUS_PY_ADD_RST2HTMLFLAG([--cloak-email-addresses])
-    DBUS_PY_ADD_RST2HTMLFLAG([--input-encoding=UTF-8])
-  ])
-AC_SUBST([RST2HTML])
-AC_SUBST([RST2HTMLFLAGS])
-
-AM_CONDITIONAL([ENABLE_API_DOCS], [test "$enable_api_docs" != no])
-AM_CONDITIONAL([ENABLE_DOCS], [test "$enable_html_docs" != no])
+AM_CONDITIONAL([ENABLE_DOCUMENTATION], [test "$enable_documentation" != no])
 
 PKG_CHECK_MODULES(DBUS, [dbus-1 >= 1.8])
 PKG_CHECK_MODULES([GLIB], [glib-2.0 >= 2.40])
