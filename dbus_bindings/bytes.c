@@ -204,8 +204,12 @@ PyTypeObject DBusPyByte_Type = {
 #endif
 
 PyDoc_STRVAR(ByteArray_tp_doc,
-"ByteArray is a subtype of str which can be used when you want an\n"
-"efficient immutable representation of a D-Bus byte array (signature 'ay').\n"
+"ByteArray(str)\n"
+"\n"
+"ByteArray is a subtype of :py:class:`bytes` (an alias for\n"
+":py:class:`str` in Python 2 but a distinct type in Python 3)\n"
+"which can be used when you want an\n"
+"efficient immutable representation of a D-Bus byte array (signature ``ay``).\n"
 "\n"
 "By default, when byte arrays are converted from D-Bus to Python, they\n"
 "come out as a `dbus.Array` of `dbus.Byte`. This is just for symmetry with\n"

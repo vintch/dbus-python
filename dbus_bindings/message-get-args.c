@@ -45,8 +45,8 @@ char dbus_py_Message_get_args_list__doc__[] = (
 "       If false (default), convert them into a dbus.Array of Bytes.\n"
 #ifndef PY3
 "   `utf8_strings` : bool\n"
-"       If true, return D-Bus strings as Python 8-bit strings (of UTF-8).\n"
-"       If false (default), return D-Bus strings as Python unicode objects.\n"
+"       If true, return D-Bus strings as Python `bytes` objects (in UTF-8).\n"
+"       If false (default), return D-Bus strings as Python `unicode` objects.\n"
 #endif
 "\n"
 "Most of the type mappings should be fairly obvious:\n"
@@ -60,7 +60,7 @@ char dbus_py_Message_get_args_list__doc__[] = (
 "intNN, uintNN    dbus.IntNN, dbus.UIntNN (int or long subclasses)\n"
 "double (d)       dbus.Double\n"
 "string (s)       dbus.String (unicode subclass)\n"
-"                 (or dbus.UTF8String, str subclass, if utf8_strings set)\n"
+"                 (or dbus.UTF8String, bytes subclass, if utf8_strings set)\n"
 "Object path (o)  dbus.ObjectPath (str subclass)\n"
 "dict (a{...})    dbus.Dictionary\n"
 "array (a...)     dbus.Array (list subclass) containing appropriate types\n"

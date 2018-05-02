@@ -178,38 +178,72 @@ Basic types
 
 The following basic data types are supported.
 
-==========================  =============================  =====
-Python type                 converted to D-Bus type        notes
-==========================  =============================  =====
-D-Bus `proxy object`_       ObjectPath (signature 'o')     `(+)`_
-`dbus.Interface`_           ObjectPath (signature 'o')     `(+)`_
-`dbus.service.Object`_      ObjectPath (signature 'o')     `(+)`_
-``dbus.Boolean``            Boolean (signature 'b')        a subclass of ``int``
-``dbus.Byte``               byte (signature 'y')           a subclass of ``int``
-``dbus.Int16``              16-bit signed integer ('n')    a subclass of ``int``
-``dbus.Int32``              32-bit signed integer ('i')    a subclass of ``int``
-``dbus.Int64``              64-bit signed integer ('x')    `(*)`_
-``dbus.UInt16``             16-bit unsigned integer ('q')  a subclass of ``int``
-``dbus.UInt32``             32-bit unsigned integer ('u')  `(*)_`
-``dbus.UInt64``             64-bit unsigned integer ('t')  `(*)_`
-``dbus.Double``             double-precision float ('d')   a subclass of ``float``
-``dbus.ObjectPath``         object path ('o')              a subclass of ``str``
-``dbus.Signature``          signature ('g')                a subclass of ``str``
-``dbus.String``             string ('s')                   a subclass of 
-                                                           ``unicode``
-``dbus.UTF8String``         string ('s')                   a subclass of ``str``
-``bool``                    Boolean ('b')
-``int`` or subclass         32-bit signed integer ('i')
-``long`` or subclass        64-bit signed integer ('x')
-``float`` or subclass       double-precision float ('d')
-``str`` or subclass         string ('s')                   must be valid UTF-8
-``unicode`` or subclass     string ('s')
-==========================  =============================  =====
-
-.. _(*):
-
-Types marked (*) may be a subclass of either ``int`` or ``long``, depending
-on platform.
++-----------------------+---------------------+-----------------------+
+|Python type            |converted to         |notes                  |
+|                       |D-Bus type           |                       |
++=======================+=====================+=======================+
+|D-Bus `proxy object`_  |object path          |`(+)`_                 |
++-----------------------+(signature 'o')      |                       |
+|`dbus.Interface`_      |                     |                       |
++-----------------------+                     |                       |
+|`dbus.service.Object`_ |                     |                       |
++-----------------------+---------------------+-----------------------+
+|``dbus.Boolean``       |Boolean              |a subclass of ``int``  |
+|                       |(signature 'b')      |                       |
++-----------------------+---------------------+                       |
+|``dbus.Byte``          |byte (signature 'y') |                       |
++-----------------------+---------------------+                       |
+|``dbus.Int16``         |16-bit signed        |                       |
+|                       |integer ('n')        |                       |
++-----------------------+---------------------+                       |
+|``dbus.UInt16``        |16-bit unsigned      |                       |
+|                       |integer ('q')        |                       |
++-----------------------+---------------------+                       |
+|``dbus.Int32``         |32-bit signed        |                       |
+|                       |integer ('i')        |                       |
++-----------------------+---------------------+-----------------------+
+|``dbus.UInt32``        |32-bit unsigned      |a subclass of ``long`` |
+|                       |integer ('u')        |(Python 2)             |
++-----------------------+---------------------+                       |
+|``dbus.Int64``         |64-bit signed        |a subclass of ``int``  |
+|                       |integer ('x')        |(Python 3)             |
++-----------------------+---------------------+                       |
+|``dbus.UInt64``        |64-bit unsigned      |                       |
+|                       |integer ('t')        |                       |
++-----------------------+---------------------+-----------------------+
+|``dbus.Double``        |double-precision     |a subclass of ``float``|
+|                       |floating point ('d') |                       |
++-----------------------+---------------------+-----------------------+
+|``dbus.ObjectPath``    |object path ('o')    |a subclass of ``str``  |
++-----------------------+---------------------+                       |
+|``dbus.Signature``     |signature ('g')      |                       |
++-----------------------+---------------------+-----------------------+
+|``dbus.String``        |string ('s')         |a subclass of          |
+|                       |                     |``unicode`` (Python 2) |
+|                       |                     |                       |
+|                       |                     |a subclass of ``str``  |
+|                       |                     |(Python 3)             |
++-----------------------+---------------------+-----------------------+
+|``dbus.UTF8String``    |string ('s')         |a subclass of ``str``, |
+|                       |                     |only in Python 2       |
++-----------------------+---------------------+-----------------------+
+|``bool``               |Boolean ('b')        |                       |
++-----------------------+---------------------+-----------------------+
+|``int`` or subclass    |32-bit signed        |                       |
+|                       |integer ('i')        |                       |
++-----------------------+---------------------+-----------------------+
+|``long`` or subclass   |64-bit signed        | Python 2 only         |
+|                       |integer ('i')        |                       |
++-----------------------+---------------------+-----------------------+
+|``float`` or subclass  |double-precision     |                       |
+|                       |floating point ('d') |                       |
++-----------------------+---------------------+-----------------------+
+|``bytes`` or subclass  |string ('s')         | must be valid UTF-8   |
++-----------------------+---------------------+-----------------------+
+|Python 2 ``unicode``   |string ('s')         |                       |
++-----------------------+                     |                       |
+|Python 3 ``str``       |                     |                       |
++-----------------------+---------------------+-----------------------+
 
 .. _(+):
 
@@ -249,7 +283,7 @@ The signature of an array is 'ax' where 'x' represents the signature of
 one item. For instance, you could also have 'as' (array of strings) or
 'a(ii)' (array of structs each containing two 32-bit integers).
 
-There's also a type ``dbus.ByteArray`` which is a subclass of ``str``,
+There's also a type ``dbus.ByteArray`` which is a subclass of ``bytes``,
 used as a more efficient representation of a D-Bus array of bytes
 (signature 'ay').
 
@@ -305,11 +339,11 @@ If a D-Bus method returns multiple values, the Python proxy method
 will return a tuple containing those values.
 
 If you want strings returned as ``dbus.UTF8String`` (a subclass of
-``str``) pass the keyword parameter ``utf8_strings=True`` to the proxy
-method.
+``bytes``) pass the keyword parameter ``utf8_strings=True`` to the proxy
+method. This mode is only available in Python 2.
 
 If you want byte arrays returned as ``dbus.ByteArray`` (also a
-subclass of ``str`` - in practice, this is often what you want) pass
+subclass of ``bytes`` - in practice, this is often what you want) pass
 the keyword parameter ``byte_arrays=True`` to the proxy method.
 
 .. --------------------------------------------------------------------
@@ -469,10 +503,11 @@ String argument matching
 ------------------------
 
 If there are keyword parameters for the form ``arg``\ *n* where n is a
-small non-negative number, their values must be ``unicode`` objects
-or UTF-8 strings. The handler will only be called if that argument
-of the signal (numbered from zero) is a D-Bus string (in particular,
-not an object-path or a signature) with that value.
+small non-negative number, their values must be Unicode strings (Python
+2 ``unicode`` or Python 3 ``str``) or UTF-8 bytestrings. The handler
+will only be called if that argument of the signal (numbered from zero)
+is a D-Bus string (in particular, not an object-path or a signature)
+with that value.
 
 .. *this comment is to stop the above breaking vim syntax highlighting*
 
