@@ -49,6 +49,8 @@
 /test-suite.log
 /test/*.trs
 /test/TestSuitePythonService.service
+/test/cross-*.log
+/test/monitor.log
 /test/run-test.log
 /test/test-*.log
 /test/test-import-repeatedly
