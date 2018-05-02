@@ -55,8 +55,6 @@ class ExportedGObject(gobject.GObject, dbus.service.Object):
     the naive approach using simple multiple inheritance won't work. This
     class has `ExportedGObjectType` as its metaclass, which is sufficient
     to make it work correctly.
-
-    :undocumented: __gtype__
     """
     __metaclass__ = ExportedGObjectType
 

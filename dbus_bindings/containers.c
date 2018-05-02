@@ -44,7 +44,7 @@ PyDoc_STRVAR(Array_tp_doc,
 "\n"
 "    dbus.Array([iterable][, signature][, variant_level])\n"
 "\n"
-"``variant_level`` must be non-negative; the default is 0.\n"
+":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"
 "``signature`` is the D-Bus signature string for a single element of the\n"
 "array, or None. If not None it must represent a single complete type, the\n"
@@ -53,13 +53,6 @@ PyDoc_STRVAR(Array_tp_doc,
 "\n"
 "If None (the default), when the Array is sent over\n"
 "D-Bus, the item signature will be guessed from the first element.\n"
-"\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
-"    Indicates how many nested Variant containers this object\n"
-"    is contained in: if a message's wire format has a variant containing a\n"
-"    variant containing an array, this is represented in Python by an\n"
-"    Array with variant_level==2.\n"
 );
 
 static struct PyMemberDef Array_tp_members[] = {
@@ -68,8 +61,11 @@ static struct PyMemberDef Array_tp_members[] = {
      "instance)"},
     {"variant_level", T_LONG, offsetof(DBusPyArray, variant_level),
      READONLY,
-     "The number of nested variants wrapping the real data. "
-     "0 if not in a variant."},
+    "Indicates how many nested Variant containers this object\n"
+    "is contained in: if a message's wire format has a variant containing a\n"
+    "variant containing an array, this is represented in Python by an\n"
+    "Array with variant_level==2.\n"
+    },
     {NULL},
 };
 
@@ -277,7 +273,7 @@ PyDoc_STRVAR(Dict_tp_doc,
 "\n"
 "    Dictionary(mapping_or_iterable=(), signature=None, variant_level=0)\n"
 "\n"
-"``variant_level`` must be non-negative; the default is 0.\n"
+":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"
 "``signature`` is either a string or None. If a string, it must consist\n"
 "of exactly two complete type signatures, representing the 'key' type\n"
@@ -288,13 +284,6 @@ PyDoc_STRVAR(Dict_tp_doc,
 "If it is None (the default), when the Dictionary is sent over\n"
 "D-Bus, the key and value signatures will be guessed from an arbitrary\n"
 "element of the Dictionary.\n"
-"\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
-"    Indicates how many nested Variant containers this object\n"
-"    is contained in: if a message's wire format has a variant containing a\n"
-"    variant containing an array of DICT_ENTRY, this is represented in\n"
-"    Python by a Dictionary with variant_level==2.\n"
 );
 
 static struct PyMemberDef Dict_tp_members[] = {
@@ -303,8 +292,11 @@ static struct PyMemberDef Dict_tp_members[] = {
      "that of each value in this Dictionary, as a Signature instance."},
     {"variant_level", T_LONG, offsetof(DBusPyDict, variant_level),
      READONLY,
-     "The number of nested variants wrapping the real data. "
-     "0 if not in a variant."},
+    "Indicates how many nested Variant containers this object\n"
+    "is contained in: if a message's wire format has a variant containing a\n"
+    "variant containing a dictionary, this is represented in Python by a\n"
+    "Dictionary with variant_level==2.\n"
+    },
     {NULL},
 };
 
@@ -540,10 +532,10 @@ PyDoc_STRVAR(Struct_tp_doc,
 "If the signature is None (default) it will be guessed\n"
 "from the types of the items during construction.\n"
 "\n"
-"``variant_level`` must be non-negative; the default is 0.\n"
+":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
+".. py:attribute:: variant_level\n"
+"\n"
 "    Indicates how many nested Variant containers this object\n"
 "    is contained in: if a message's wire format has a variant containing a\n"
 "    variant containing a struct, this is represented in Python by a\n"

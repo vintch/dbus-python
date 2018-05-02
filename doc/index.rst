@@ -4,11 +4,8 @@ dbus-python_: Python bindings for D-Bus
 
 .. _dbus-python: http://www.freedesktop.org/wiki/Software/DBusBindings#python
 
-dbus-python is the original Python binding for ``dbus``, the reference
-implementation of the D-Bus protocol.
-
-Online documentation can be found at
-<http://dbus.freedesktop.org/doc/dbus-python/>.
+dbus-python is a Python binding for ``dbus``, the reference implementation
+of the D-Bus protocol.
 
 Problems and alternatives
 =========================
@@ -33,3 +30,24 @@ Alternative ways to get your Python code onto D-Bus include:
 .. _PyGI: https://live.gnome.org/PyGObject
 .. _Qt: https://qt.nokia.com/
 .. _PyQT: http://www.riverbankcomputing.co.uk/software/pyqt/intro
+
+Documentation
+=============
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Contents:
+
+    tutorial
+    dbus
+    PY3PORT
+    news
+    HACKING
+    API_CHANGES
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

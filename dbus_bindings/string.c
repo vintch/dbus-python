@@ -129,19 +129,16 @@ PyTypeObject DBusPyUTF8String_Type = {
 /* Object path ====================================================== */
 
 PyDoc_STRVAR(ObjectPath_tp_doc,
-"A D-Bus object path, such as '/com/example/MyApp/Documents/abc'.\n"
+"dbus.ObjectPath(path: str[, variant_level: int=0])\n"
+"A D-Bus object path, such as ``/com/example/MyApp/Documents/abc``.\n"
 "\n"
-"ObjectPath is a subtype of str, and object-paths behave like strings.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.ObjectPath(path: str, variant_level: int) -> ObjectPath\n"
+"ObjectPath is a subtype of :py:class:`str`, and object-paths behave like strings.\n"
 "\n"
 "path must be an ASCII string following the syntax of object paths.\n"
 "variant_level must be non-negative; the default is 0.\n"
 "\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
+".. py:attribute:: variant_level\n"
+"\n"
 "    Indicates how many nested Variant containers this object\n"
 "    is contained in: if a message's wire format has a variant containing a\n"
 "    variant containing an object path, this is represented in Python by an\n"
@@ -223,20 +220,16 @@ PyDoc_STRVAR(String_tp_doc,
 "    String(value: str or unicode[, variant_level: int]) -> String\n"
 "\n"
 "variant_level must be non-negative; the default is 0.\n"
-"\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
-"    Indicates how many nested Variant containers this object\n"
-"    is contained in: if a message's wire format has a variant containing a\n"
-"    variant containing a string, this is represented in Python by a\n"
-"    String or UTF8String with variant_level==2.\n"
 );
 
 static PyMemberDef String_tp_members[] = {
     {"variant_level", T_LONG, offsetof(DBusPyString, variant_level),
      READONLY,
-     "The number of nested variants wrapping the real data. "
-     "0 if not in a variant"},
+    "Indicates how many nested Variant containers this object\n"
+    "is contained in: if a message's wire format has a variant containing a\n"
+    "variant containing an array, this is represented in Python by a\n"
+    "String or UTF8String with variant_level==2.\n"
+    },
     {NULL},
 };
 

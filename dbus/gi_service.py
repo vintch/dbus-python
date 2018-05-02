@@ -74,9 +74,7 @@ def ExportedGObject__init__(self, conn=None, object_path=None, **kwargs):
                                  bus_name=bus_name)
 
 ExportedGObject__doc__ = '''
-A GObject which is exported on the D-Bus.
-
-:undocumented: __gtype__
+A GObject which is exported on D-Bus.
 '''
 
 ExportedGObject = ExportedGObjectType(

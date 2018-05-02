@@ -1,6 +1,6 @@
-=========================================
-D-Bus Python bindings - notes for hackers
-=========================================
+===============
+Developer notes
+===============
 
 :Author: Simon McVittie, `Collabora`_
 :Date: 2007-01-24

@@ -70,7 +70,8 @@ get_variant_level(PyObject *obj)
 }
 
 char dbus_py_Message_append__doc__[] = (
-"set_args(*args[, **kwargs])\n\n"
+"message.append(*args, **kwargs)\n"
+"\n"
 "Set the message's arguments from the positional parameter, according to\n"
 "the signature given by the ``signature`` keyword parameter.\n"
 "\n"

@@ -75,11 +75,11 @@ class BusName(object):
     If a well-known name is requested multiple times, multiple references
     to the same BusName object will be returned.
 
-    Caveats
-    -------
-    - Assumes that named services are only ever requested using this class -
-      if you request names from the bus directly, confusion may occur.
-    - Does not handle queueing.
+    :Caveats:
+
+        - Assumes that named services are only ever requested using this class -
+          if you request names from the bus directly, confusion may occur.
+        - Does not handle queueing.
     """
     def __new__(cls, name, bus=None, allow_replacement=False , replace_existing=False, do_not_queue=False):
         """Constructor, which may either return an existing cached object

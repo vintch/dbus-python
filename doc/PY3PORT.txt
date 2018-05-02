@@ -1,6 +1,6 @@
-===============================
-Porting python-dbus to Python 3
-===============================
+===================
+Porting to Python 3
+===================
 
 This is an experimental port to Python 3.x where x >= 2.  There are lots of
 great sources for porting C extensions to Python 3, including:

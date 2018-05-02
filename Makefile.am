@@ -416,36 +416,56 @@ _maintainer-update-htmldocs:
 	@echo "*** --enable-html-docs"
 endif
 
+sphinx_sources = \
+	doc/API_CHANGES.txt \
+	doc/conf.py \
+	doc/dbus.bus.rst \
+	doc/dbus.connection.rst \
+	doc/dbus.decorators.rst \
+	doc/dbus.exceptions.rst \
+	doc/dbus.gi_service.rst \
+	doc/dbus.glib.rst \
+	doc/dbus.gobject_service.rst \
+	doc/dbus.lowlevel.rst \
+	doc/dbus.mainloop.rst \
+	doc/dbus.proxies.rst \
+	doc/dbus.rst \
+	doc/dbus.server.rst \
+	doc/dbus.service.rst \
+	doc/dbus.types.rst \
+	doc/HACKING.txt \
+	doc/index.rst \
+	doc/news.rst \
+	doc/PY3PORT.txt \
+	doc/tutorial.txt \
+	NEWS \
+	README \
+	$(NULL)
+EXTRA_DIST += $(sphinx_sources)
+
 if ENABLE_API_DOCS
-all: api/index.html
+all: doc/_build/index.html
 
-clean-local:
-	rm -rf api
-
-APIDOC_PYTHONPATH = $(abs_top_srcdir):$(abs_top_builddir)/.libs
-
-api api/index.html: $(nobase_python_PYTHON) \
-		    _dbus_bindings.la \
-		    _dbus_glib_bindings.la
-	rm -rf api
-	mkdir api
+doc/_build/index.html: $(nobase_python_PYTHON) \
+			_dbus_bindings.la \
+			_dbus_glib_bindings.la \
+			$(sphinx_sources) \
+			$(NULL)
+	rm -rf doc/_build
+	mkdir doc/_build
 	cd $(abs_top_srcdir) && \
-	PYTHONPATH=$(APIDOC_PYTHONPATH) DBUS_PYTHON_NO_DEPRECATED=1 \
-	$(PYTHON) -Wignore::DeprecationWarning \
-	$(EPYDOC) -o $(abs_top_builddir)/api --html \
-		--docformat restructuredtext -v \
-		`find dbus -name '*.py' \
-			| sed -e 's#/__init__\.py##g' \
-				-e 's/\.py\>//g' -e 's#/#.#'g` \
-		|| { rm -rf api; exit 1; }
+	abs_top_srcdir='$(abs_top_srcdir)' \
+	abs_top_builddir='$(abs_top_builddir)' \
+	DBUS_PYTHON_NO_DEPRECATED=1 \
+	$(PYTHON) -m sphinx -b html $(abs_top_srcdir)/doc doc/_build
 
-_maintainer-update-apidocs: api
-	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX api/ \
-	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/api/
+_maintainer-update-apidocs: doc/_build/index.html
+	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
+	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
 else
 _maintainer-update-apidocs:
-	@echo "*** Not updating the API docs on the website - install epydoc 3"
-	@echo "*** alpha (or newer) and configure with --enable-api-docs"
+	@echo "*** Not updating the API docs on the website - install sphinx"
+	@echo "*** and configure with --enable-api-docs"
 endif
 
 check_c_sources = \

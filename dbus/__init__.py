@@ -1,12 +1,6 @@
 """\
 Implements the public API for a D-Bus client. See the dbus.service module
 to export objects or claim well-known names.
-
-..
-  for epydoc's benefit
-
-:NewField SupportedUsage: Supported usage
-:NewField Constructor: Constructor
 """
 
 # Copyright (C) 2003, 2004, 2005, 2006 Red Hat Inc. <http://www.redhat.com/>

@@ -99,59 +99,22 @@ dnl Building documentation
 
 AX_GENERATE_CHANGELOG
 
-AC_MSG_CHECKING([whether you want to build HTML docs])
-AC_ARG_ENABLE(html-docs,
-AC_HELP_STRING([--enable-html-docs], [Enable HTML documentation building (requires docutils, default: auto-detect)]), enable_html_docs=$enableval, enable_html_docs="if possible")
-AC_MSG_RESULT([$enable_html_docs])
-
-AC_MSG_CHECKING([whether you want to build API docs])
-AC_ARG_ENABLE(api-docs,
-AC_HELP_STRING([--enable-api-docs], [Enable API documentation building (requires epydoc 3 and docutils)]), enable_api_docs=$enableval, enable_api_docs="if possible")
-AC_MSG_RESULT([$enable_api_docs])
-
-
-AS_IF([test "$enable_api_docs" != no || test "$enable_html_docs" != no],
+AC_ARG_ENABLE([documentation],
+  [AC_HELP_STRING([--enable-documentation],
+    [Enable documentation building (requires sphinx and sphinx_rtd_theme)])],
+  [:],
+  [enable_documentation=no])
+AX_PYTHON_MODULE([sphinx])
+AS_IF([test "x$HAVE_PYMOD_SPHINX" = xno],
   [
-  AX_PYTHON_MODULE([docutils])
-  AS_IF([test "$HAVE_PYMOD_DOCUTILS" = no],
-    [
-    AS_IF([test "$enable_api_docs" = "if possible"], [enable_api_docs=no])
-    AS_IF([test "$enable_html_docs" = "if possible"], [enable_html_docs=no])
-    AS_IF([test "$enable_api_docs" != no || test "$enable_html_docs" != no],
-      [AC_MSG_ERROR([cannot compile HTML documentation or API documentation without python-docutils installed])])
-    ])
+  AS_IF([test "$enable_documentation" != no],
+    [AC_MSG_ERROR([cannot build documentation without sphinx Python module])])
   ])
-
-AS_IF([test "${enable_api_docs}" != no],
+AX_PYTHON_MODULE([sphinx_rtd_theme])
+AS_IF([test "x$HAVE_PYMOD_SPHINX_RTD_THEME" = xno],
   [
-  AC_PATH_PROG([EPYDOC], [epydoc])
-  AX_PYTHON_MODULE([epydoc])
-  AC_MSG_CHECKING([epydoc 3])
-  AS_IF([test -n "$EPYDOC" && test "$HAVE_PYMOD_EPYDOC" = yes],
-    [
-    EPYDOC_VERSION=`$EPYDOC --version`
-    AS_CASE(["$EPYDOC_VERSION"],
-      [*ersion?3*],
-        [
-        AC_MSG_RESULT([yes, $EPYDOC_VERSION])
-        ],
-      [*],
-        [
-        AC_MSG_RESULT([no, $EPYDOC_VERSION])
-        EPYDOC=
-        ])
-    ],
-    [
-    EPYDOC=
-    ])
-  AS_IF([test -z "$EPYDOC"],
-    [
-    AS_CASE(["$enable_api_docs"],
-      [if*possible],
-        [enable_api_docs=no],
-      [*],
-        [AC_MSG_ERROR([cannot compile API documentation without epydoc 3.0beta1 or newer installed])])
-    ])
+  AS_IF([test "$enable_documentation" != no],
+    [AC_MSG_ERROR([cannot build documentation without sphinx_rtd_theme Python module])])
   ])
 
 AC_ARG_VAR([DBUS_RUN_SESSION],
