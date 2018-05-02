@@ -93,12 +93,11 @@ MethodCallMessage_tp_repr(PyObject *self)
         path, interface, member, destination);
 }
 
-PyDoc_STRVAR(MethodCallMessage_tp_doc, "A method-call message.\n"
+PyDoc_STRVAR(MethodCallMessage_tp_doc,
+"dbus.lowlevel.MethodCallMessage(destination: str or None, path: str, "
+"interface: str or None, method: str)\n"
 "\n"
-"Constructor::\n"
-"\n"
-"    dbus.lowlevel.MethodCallMessage(destination: str or None, path: str,\n"
-"                                    interface: str or None, method: str)\n"
+"A method-call message.\n"
 "\n"
 "``destination`` is the destination bus name, or None to send the\n"
 "message directly to the peer (usually the bus daemon).\n"
@@ -139,9 +138,10 @@ MethodCallMessage_tp_init(Message *self, PyObject *args, PyObject *kwargs)
     return 0;
 }
 
-PyDoc_STRVAR(MethodReturnMessage_tp_doc, "A method-return message.\n\n"
-"Constructor::\n\n"
-"    dbus.lowlevel.MethodReturnMessage(method_call: MethodCallMessage)\n");
+PyDoc_STRVAR(MethodReturnMessage_tp_doc,
+"dbus.lowlevel.MethodReturnMessage(method_call: MethodCallMessage)\n"
+"\n"
+"A method-return message.");
 
 static int
 MethodReturnMessage_tp_init(Message *self, PyObject *args, PyObject *kwargs)
@@ -165,9 +165,10 @@ MethodReturnMessage_tp_init(Message *self, PyObject *args, PyObject *kwargs)
     return 0;
 }
 
-PyDoc_STRVAR(SignalMessage_tp_doc, "A signal message.\n\n"
-"Constructor::\n\n"
-"   dbus.lowlevel.SignalMessage(path: str, interface: str, method: str)\n");
+PyDoc_STRVAR(SignalMessage_tp_doc,
+"dbus.lowlevel.SignalMessage(path: str, interface: str, method: str)\n"
+"\n"
+"A signal message.\n");
 static int
 SignalMessage_tp_init(Message *self, PyObject *args, PyObject *kwargs)
 {
@@ -216,10 +217,11 @@ SignalMessage_tp_repr(PyObject *self)
                                 path, interface, member, destination);
 }
 
-PyDoc_STRVAR(ErrorMessage_tp_doc, "An error message.\n\n"
-"Constructor::\n\n"
-"   dbus.lowlevel.ErrorMessage(reply_to: Message, error_name: str,\n"
-"                              error_message: str or None)\n");
+PyDoc_STRVAR(ErrorMessage_tp_doc,
+"dbus.lowlevel.ErrorMessage(reply_to: Message, error_name: str, "
+"error_message: str or None)\n"
+"\n"
+"An error message.\n");
 static int
 ErrorMessage_tp_init(Message *self, PyObject *args, PyObject *kwargs)
 {

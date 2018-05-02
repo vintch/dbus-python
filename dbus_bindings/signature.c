@@ -31,13 +31,11 @@
 #include "types-internal.h"
 
 PyDoc_STRVAR(Signature_tp_doc,
+"Signature(value: str or unicode[, variant_level: int])\n"
+"\n"
 "A string subclass whose values are restricted to valid D-Bus\n"
 "signatures. When iterated over, instead of individual characters it\n"
 "produces Signature instances representing single complete types.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    ``Signature(value: str or unicode[, variant_level: int]) -> Signature``\n"
 "\n"
 "``value`` must be a valid D-Bus signature (zero or more single complete\n"
 "types).\n"

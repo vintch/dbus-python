@@ -31,11 +31,9 @@
 /* Connection definition ============================================ */
 
 PyDoc_STRVAR(Connection_tp_doc,
+"_dbus_bindings.Connection(address, mainloop=None)\n"
+"\n"
 "A D-Bus connection.\n"
-"\n"
-"::\n"
-"\n"
-"   Connection(address, mainloop=None) -> Connection\n"
 );
 
 /* D-Bus Connection user data slot, containing an owned reference to either

@@ -33,16 +33,14 @@
 /* Array ============================================================ */
 
 PyDoc_STRVAR(Array_tp_doc,
+"dbus.Array([iterable][, signature][, variant_level])\n"
+"\n"
 "An array of similar items, implemented as a subtype of list.\n"
 "\n"
 "As currently implemented, an Array behaves just like a list, but\n"
 "with the addition of a ``signature`` property set by the constructor;\n"
 "conversion of its items to D-Bus types is only done when it's sent in\n"
 "a Message. This might change in future so validation is done earlier.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Array([iterable][, signature][, variant_level])\n"
 "\n"
 ":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"
@@ -261,6 +259,8 @@ PyTypeObject DBusPyArray_Type = {
 /* Dict ============================================================= */
 
 PyDoc_STRVAR(Dict_tp_doc,
+"dbus.Dictionary(mapping_or_iterable=(), signature=None, variant_level=0)\n"
+"\n"
 "An mapping whose keys are similar and whose values are similar,\n"
 "implemented as a subtype of dict.\n"
 "\n"
@@ -268,10 +268,6 @@ PyDoc_STRVAR(Dict_tp_doc,
 "with the addition of a ``signature`` property set by the constructor;\n"
 "conversion of its items to D-Bus types is only done when it's sent in\n"
 "a Message. This may change in future so validation is done earlier.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    Dictionary(mapping_or_iterable=(), signature=None, variant_level=0)\n"
 "\n"
 ":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"
@@ -516,11 +512,9 @@ PyTypeObject DBusPyDict_Type = {
 static PyObject *struct_signatures;
 
 PyDoc_STRVAR(Struct_tp_doc,
+"dbus.Struct(iterable, signature=None, variant_level=0)\n"
+"\n"
 "An structure containing items of possibly distinct types.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Struct(iterable, signature=None, variant_level=0) -> Struct\n"
 "\n"
 "D-Bus structs may not be empty, so the iterable argument is required and\n"
 "may not be an empty iterable.\n"

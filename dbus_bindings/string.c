@@ -203,20 +203,20 @@ PyTypeObject DBusPyObjectPath_Type = {
 /* Unicode string representation ==================================== */
 
 PyDoc_STRVAR(String_tp_doc,
-"A string represented using Unicode - a subtype of `unicode`.\n"
+"dbus.String(value: str or unicode[, variant_level: int])\n"
+"\n"
+"A string represented using Unicode - a subtype of ``unicode`` (Python 2)\n"
+"or ``str`` (Python 3).\n"
 "\n"
 "All strings on D-Bus are required to be valid Unicode; in the \"wire\n"
 "protocol\" they're transported as UTF-8.\n"
 "\n"
 "By default, when strings are converted from D-Bus to Python, they\n"
-"come out as this class. If you prefer to get UTF-8 strings (as instances\n"
+"come out as this class. In Python 2, if you prefer to get UTF-8 strings\n"
+"(as instances\n"
 "of a subtype of `str`) or you want to avoid the conversion overhead of\n"
 "going from UTF-8 to Python's internal Unicode representation, see the\n"
 "documentation for `dbus.UTF8String`.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    String(value: str or unicode[, variant_level: int]) -> String\n"
 "\n"
 "variant_level must be non-negative; the default is 0.\n"
 );

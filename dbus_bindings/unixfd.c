@@ -29,11 +29,9 @@
 #include "types-internal.h"
 
 PyDoc_STRVAR(UnixFd_tp_doc,
-"An Unix Fd.\n"
+"dbus.UnixFd(value: int or file object[, variant_level: int])\n"
 "\n"
-"Constructor::\n"
-"\n"
-"    dbus.UnixFd(value: int or file object[, variant_level: int]) -> UnixFd\n"
+"A Unix Fd.\n"
 "\n"
 "``value`` must be the integer value of a file descriptor, or an object that\n"
 "implements the fileno() method. Otherwise, `ValueError` will be\n"

@@ -37,17 +37,17 @@
 #endif
 
 PyDoc_STRVAR(Byte_tp_doc,
+"dbus.Byte(integer or bytes of length 1[, variant_level])\n"
+"\n"
 "An unsigned byte: a subtype of int, with range restricted to [0, 255].\n"
 "\n"
-"A Byte b may be converted to a str of length 1 via str(b) == chr(b).\n"
+"A Byte `b` may be converted to a ``str`` of length 1 via\n"
+"``str(b) == chr(b)`` (Python 2) or to a ``bytes`` of length 1\n"
+"via ``bytes([b])`` (Python 3).\n"
 "\n"
 "Most of the time you don't want to use this class - it mainly exists\n"
 "for symmetry with the other D-Bus types. See `dbus.ByteArray` for a\n"
 "better way to handle arrays of Byte.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"   dbus.Byte(integer or str of length 1[, variant_level])\n"
 "\n"
 ":py:attr:`variant_level` must be non-negative; the default is 0.\n"
 "\n"

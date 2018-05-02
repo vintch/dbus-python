@@ -29,8 +29,10 @@
 
 #ifdef PY3
 #define INTBASE (DBusPyLongBase_Type)
+#define LONG_TYPE_NAME "int"
 #else
 #define INTBASE (DBusPyIntBase_Type)
+#define LONG_TYPE_NAME "long"
 #endif
 
 /* Specific types =================================================== */
@@ -38,12 +40,10 @@
 /* Boolean, a subclass of DBusPythonInt ============================= */
 
 PyDoc_STRVAR(Boolean_tp_doc,
-"A boolean, represented as a subtype of `int` (not `bool`, because `bool`\n"
+"dbus.Boolean(value: bool[, variant_level: int])\n"
+"\n"
+"A boolean, represented as a subtype of ``int`` (not ``bool``, because ``bool``\n"
 "cannot be subclassed).\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Boolean(value[, variant_level]) -> Boolean\n"
 "\n"
 "``value`` is converted to 0 or 1 as if by ``int(bool(value))``.\n"
 "\n"
@@ -148,12 +148,10 @@ PyTypeObject DBusPyBoolean_Type = {
 /* Int16 ============================================================ */
 
 PyDoc_STRVAR(Int16_tp_doc,
+"dbus.Int16(value: int[, variant_level: int])\n"
+"\n"
 "A signed 16-bit integer between -0x8000 and +0x7FFF, represented as\n"
 "a subtype of `int`.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Int16(value: int[, variant_level: int]) -> Int16\n"
 "\n"
 "value must be within the allowed range, or OverflowError will be\n"
 "raised.\n"
@@ -238,12 +236,10 @@ PyTypeObject DBusPyInt16_Type = {
 /* UInt16 =========================================================== */
 
 PyDoc_STRVAR(UInt16_tp_doc,
+"dbus.UInt16(value: int[, variant_level: int])\n"
+"\n"
 "An unsigned 16-bit integer between 0 and 0xFFFF, represented as\n"
-"a subtype of `int`.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.UInt16(value: int[, variant_level: int]) -> UInt16\n"
+"a subtype of ``int``.\n"
 "\n"
 "``value`` must be within the allowed range, or `OverflowError` will be\n"
 "raised.\n"
@@ -330,12 +326,10 @@ PyTypeObject DBusPyUInt16_Type = {
 /* Int32 ============================================================ */
 
 PyDoc_STRVAR(Int32_tp_doc,
+"dbus.Int32(value: int[, variant_level: int])\n"
+"\n"
 "A signed 32-bit integer between -0x8000 0000 and +0x7FFF FFFF, represented as\n"
-"a subtype of `int`.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Int32(value: int[, variant_level: int]) -> Int32\n"
+"a subtype of ``int``.\n"
 "\n"
 "``value`` must be within the allowed range, or `OverflowError` will be\n"
 "raised.\n"
@@ -420,15 +414,10 @@ PyTypeObject DBusPyInt32_Type = {
 /* UInt32 =========================================================== */
 
 PyDoc_STRVAR(UInt32_tp_doc,
+"dbus.UInt32(value: " LONG_TYPE_NAME "[, variant_level: int])\n"
+"\n"
 "An unsigned 32-bit integer between 0 and 0xFFFF FFFF, represented as a\n"
-"subtype of `long`.\n"
-"\n"
-"Note that this may be changed in future to be a subtype of `int` on\n"
-"64-bit platforms; applications should not rely on either behaviour.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.UInt32(value: long[, variant_level: int]) -> UInt32\n"
+"subtype of ``long`` in Python 2 or ``int`` in Python 3.\n"
 "\n"
 "``value`` must be within the allowed range, or `OverflowError` will be\n"
 "raised.\n"
@@ -521,18 +510,14 @@ PyTypeObject DBusPyUInt32_Type = {
 /* Int64 =========================================================== */
 
 PyDoc_STRVAR(Int64_tp_doc,
+"dbus.Int64(value: " LONG_TYPE_NAME "[, variant_level: int])\n"
+"\n"
 "A signed 64-bit integer between -0x8000 0000 0000 0000 and\n"
-"+0x7FFF FFFF FFFF FFFF, represented as a subtype of `long`.\n"
+"+0x7FFF FFFF FFFF FFFF, represented as a\n"
+"subtype of ``long`` in Python 2 or ``int`` in Python 3.\n"
 "\n"
 "Note that this may be changed in future to be a subtype of `int` on\n"
 "64-bit platforms; applications should not rely on either behaviour.\n"
-"\n"
-"This type only works on platforms where the C compiler has suitable\n"
-"64-bit types, such as C99 ``long long``.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.Int64(value: long[, variant_level: int]) -> Int64\n"
 "\n"
 "``value`` must be within the allowed range, or `OverflowError` will be\n"
 "raised.\n"
@@ -631,15 +616,10 @@ PyTypeObject DBusPyInt64_Type = {
 /* UInt64 =========================================================== */
 
 PyDoc_STRVAR(UInt64_tp_doc,
+"dbus.UInt64(value: " LONG_TYPE_NAME "[, variant_level: int])\n"
+"\n"
 "An unsigned 64-bit integer between 0 and 0xFFFF FFFF FFFF FFFF,\n"
-"represented as a subtype of `long`.\n"
-"\n"
-"This type only exists on platforms where the C compiler has suitable\n"
-"64-bit types, such as C99 ``unsigned long long``.\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.UInt64(value: long[, variant_level: int]) -> UInt64\n"
+"subtype of ``long`` in Python 2 or ``int`` in Python 3.\n"
 "\n"
 "``value`` must be within the allowed range, or `OverflowError` will be\n"
 "raised.\n"
