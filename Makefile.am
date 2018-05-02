@@ -16,6 +16,7 @@ EXTRA_DIST = \
 	COPYING \
 	ChangeLog \
 	dbus-python.pc.in \
+	doc/_static/.gitignore \
 	examples/example-async-client.py \
 	examples/example-client.py \
 	examples/example-service.py \
@@ -455,14 +456,13 @@ doc/_build/stamp: $(nobase_python_PYTHON) \
 			Makefile \
 			$(NULL)
 	rm -rf doc/_build
-	mkdir doc/_build
-	cd $(abs_top_srcdir) && \
+	$(MKDIR_P) doc/_build
 	abs_top_srcdir='$(abs_top_srcdir)' \
 	abs_top_builddir='$(abs_top_builddir)' \
 	DBUS_PYTHON_NO_DEPRECATED=1 \
 	$(PYTHON) -m sphinx -b html $(abs_top_srcdir)/doc doc/_build
 	DBUS_TOP_SRCDIR="$(abs_top_srcdir)" \
-	$(PYTHON) doc/redirects.py
+	$(PYTHON) $(srcdir)/doc/redirects.py
 	touch $@
 
 _maintainer-update-apidocs: doc/_build/stamp
@@ -473,6 +473,9 @@ _maintainer-update-apidocs:
 	@echo "*** Not updating the API docs on the website - install sphinx"
 	@echo "*** and configure with --enable-api-docs"
 endif
+
+clean-local:
+	rm -rf doc/_build
 
 check_c_sources = \
 	$(_dbus_bindings_la_SOURCES) \
