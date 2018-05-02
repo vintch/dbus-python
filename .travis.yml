@@ -43,6 +43,7 @@ install:
     ${dbus_ci_system_python}
     ${dbus_ci_system_python%-dbg}-docutils
     ${dbus_ci_system_python%-dbg}-gi
+    ${dbus_ci_system_python%-dbg}-setuptools
     ${dbus_ci_system_python%-dbg}-sphinx
   - >
     test "${dbus_ci_system_python%-dbg}" = "${dbus_ci_system_python}" ||
