@@ -32,7 +32,10 @@
 /* UTF-8 string representation ====================================== */
 
 PyDoc_STRVAR(UTF8String_tp_doc,
-"A string represented using UTF-8 - a subtype of `str`.\n"
+"dbus.UTF8String(value: bytes or unicode[, variant_level: int=0])\n"
+"\n"
+"A string represented using UTF-8 - a subtype of `bytes`.\n"
+"This type is only available in Python 2.\n"
 "\n"
 "All strings on D-Bus are required to be valid Unicode; in the \"wire\n"
 "protocol\" they're transported as UTF-8.\n"
@@ -50,21 +53,17 @@ PyDoc_STRVAR(UTF8String_tp_doc,
 "* `dbus.Interface.connect_to_signal`\n"
 "* `Bus.add_signal_receiver`\n"
 "\n"
-"\n"
-"Constructor::\n"
-"\n"
-"    dbus.UTF8String(value: str or unicode[, variant_level: int]) -> UTF8String\n"
-"\n"
-"If value is a str object it must be valid UTF-8.\n"
+"If value is a bytes object it must be valid UTF-8.\n"
 "\n"
 "variant_level must be non-negative; the default is 0.\n"
 "\n"
-":IVariables:\n"
-"  `variant_level` : int\n"
+".. py:attribute:: variant_level\n"
+"\n"
 "    Indicates how many nested Variant containers this object\n"
 "    is contained in: if a message's wire format has a variant containing a\n"
 "    variant containing a string, this is represented in Python by a\n"
 "    String or UTF8String with variant_level==2.\n"
+"\n"
 ":Since: 0.80 (in older versions, use dbus.String)\n"
 );
 
