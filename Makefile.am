@@ -437,6 +437,8 @@ sphinx_sources = \
 	doc/index.rst \
 	doc/news.rst \
 	doc/PY3PORT.txt \
+	doc/redirects \
+	doc/redirects.py \
 	doc/tutorial.txt \
 	NEWS \
 	README \
@@ -444,12 +446,13 @@ sphinx_sources = \
 EXTRA_DIST += $(sphinx_sources)
 
 if ENABLE_API_DOCS
-all: doc/_build/index.html
+all: doc/_build/stamp
 
-doc/_build/index.html: $(nobase_python_PYTHON) \
+doc/_build/stamp: $(nobase_python_PYTHON) \
 			_dbus_bindings.la \
 			_dbus_glib_bindings.la \
 			$(sphinx_sources) \
+			Makefile \
 			$(NULL)
 	rm -rf doc/_build
 	mkdir doc/_build
@@ -458,8 +461,11 @@ doc/_build/index.html: $(nobase_python_PYTHON) \
 	abs_top_builddir='$(abs_top_builddir)' \
 	DBUS_PYTHON_NO_DEPRECATED=1 \
 	$(PYTHON) -m sphinx -b html $(abs_top_srcdir)/doc doc/_build
+	DBUS_TOP_SRCDIR="$(abs_top_srcdir)" \
+	$(PYTHON) doc/redirects.py
+	touch $@
 
-_maintainer-update-apidocs: doc/_build/index.html
+_maintainer-update-apidocs: doc/_build/stamp
 	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
 else
