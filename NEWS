@@ -1,7 +1,24 @@
 D-Bus Python Bindings 1.2.8 (UNRELEASED)
 ========================================
 
-...
+Dependencies:
+
+• Documentation requires Sphinx and the readthedocs theme
+• Documentation no longer requires epydoc
+
+Enhancements:
+
+• Build documentation with Sphinx instead of epydoc
+
+• Remove obsolete COMPAT.txt, documenting compatibility breaks in
+  versions over a decade old
+
+Fixes:
+
+• Make sure $(builddir)/test exists before creating .test files there
+
+• Add PKG-INFO and egg_info to dist tarballs so they can be uploaded
+  to PyPI again
 
 D-Bus Python Bindings 1.2.6 (2018-01-29)
 ========================================
