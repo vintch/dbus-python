@@ -398,13 +398,17 @@ sphinx_sources = \
 	doc/index.rst \
 	doc/news.rst \
 	doc/PY3PORT.txt \
-	doc/redirects \
-	doc/redirects.py \
 	doc/tutorial.txt \
 	NEWS \
 	README \
 	$(NULL)
 EXTRA_DIST += $(sphinx_sources)
+
+# A hack used for the HTML documentation on dbus.freedesktop.org
+EXTRA_DIST += \
+	doc/redirects \
+	doc/redirects.py \
+	$(NULL)
 
 install-data-local: install-data-local-sphinx
 uninstall-local: uninstall-local-sphinx
@@ -424,11 +428,11 @@ doc/_build/.stamp: $(nobase_python_PYTHON) \
 	abs_top_builddir='$(abs_top_builddir)' \
 	DBUS_PYTHON_NO_DEPRECATED=1 \
 	$(PYTHON) -m sphinx -b html $(abs_top_srcdir)/doc doc/_build
-	DBUS_TOP_SRCDIR="$(abs_top_srcdir)" \
-	$(PYTHON) $(srcdir)/doc/redirects.py
 	touch $@
 
 maintainer-update-website: doc/_build/.stamp
+	DBUS_TOP_SRCDIR="$(abs_top_srcdir)" \
+	$(PYTHON) $(srcdir)/doc/redirects.py
 	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
 
