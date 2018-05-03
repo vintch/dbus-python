@@ -28,38 +28,8 @@ cache:
   directories:
     - $HOME/.ccache
 install:
-  - 'sudo apt-get -qq -y update'
-  - >
-    sudo apt-get -qq -y install
-    autoconf
-    automake
-    ccache
-    dbus
-    gnome-desktop-testing
-    libdbus-1-dev
-    libtool
-  - >
-    test -z "$dbus_ci_system_python" || sudo apt-get -qq -y install
-    ${dbus_ci_system_python}
-    ${dbus_ci_system_python%-dbg}-docutils
-    ${dbus_ci_system_python%-dbg}-gi
-    ${dbus_ci_system_python%-dbg}-setuptools
-  - >
-    test "${dbus_ci_system_python%-dbg}" = "${dbus_ci_system_python}" ||
-    sudo apt-get -qq -y install
-    ${dbus_ci_system_python%-dbg}-gi-dbg
-  - >
-    if test -n "$dbus_ci_system_python" = python; then
-    sudo apt-get -qq -y install python-gobject-2;
-    fi
-  - >
-    wget
-    http://deb.debian.org/debian/pool/main/a/autoconf-archive/autoconf-archive_20160916-1_all.deb
-  - 'sudo dpkg -i autoconf-archive_*_all.deb'
-  - 'rm autoconf-archive_*_all.deb'
-  - test -n "$dbus_ci_system_python" || pip install sphinx sphinx_rtd_theme tap.py
   - test -z "$dbus_ci_system_python" || deactivate
-  - test -z "$dbus_ci_system_python" || pip install --user sphinx sphinx_rtd_theme tap.py
+  - tools/travis-ci-setup.sh
 python:
   - "3.5"
   - "3.5-dev"
