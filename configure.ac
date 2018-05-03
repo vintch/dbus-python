@@ -103,18 +103,20 @@ AC_ARG_ENABLE([documentation],
   [AC_HELP_STRING([--enable-documentation],
     [Enable documentation building (requires sphinx and sphinx_rtd_theme)])],
   [:],
-  [enable_documentation=no])
+  [enable_documentation=auto])
 AX_PYTHON_MODULE([sphinx])
 AS_IF([test "x$HAVE_PYMOD_SPHINX" = xno],
   [
-  AS_IF([test "$enable_documentation" != no],
-    [AC_MSG_ERROR([cannot build documentation without sphinx Python module])])
+  AS_IF([test "$enable_documentation" = yes],
+    [AC_MSG_ERROR([cannot build documentation without sphinx Python module])],
+    [enable_documentation=no])
   ])
 AX_PYTHON_MODULE([sphinx_rtd_theme])
 AS_IF([test "x$HAVE_PYMOD_SPHINX_RTD_THEME" = xno],
   [
-  AS_IF([test "$enable_documentation" != no],
-    [AC_MSG_ERROR([cannot build documentation without sphinx_rtd_theme Python module])])
+  AS_IF([test "$enable_documentation" = yes],
+    [AC_MSG_ERROR([cannot build documentation without sphinx_rtd_theme Python module])],
+    [enable_documentation=no])
   ])
 
 AC_ARG_VAR([DBUS_RUN_SESSION],
