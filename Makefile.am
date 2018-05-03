@@ -373,18 +373,6 @@ dist-hook: dist-ChangeLog
 	sed -e 's/.*/include &/' < $(distdir)/MANIFEST > $(distdir)/MANIFEST.in
 	cp $(distdir)/MANIFEST $(distdir)/dbus_python.egg-info/SOURCES.txt
 
-TXT_RSTDOCS = \
-	doc/tutorial.txt \
-	doc/API_CHANGES.txt \
-	doc/HACKING.txt \
-	doc/PY3PORT.txt \
-	$(NULL)
-RSTDOCS = \
-	README \
-	NEWS \
-	$(NULL)
-dist_doc_DATA = $(TXT_RSTDOCS) $(RSTDOCS)
-
 maintainer-upload:
 	rsync -tvpP --chmod=ugo=r $(DIST_ARCHIVES) $(DIST_ARCHIVES:%=%.asc) \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/releases/dbus-python/
@@ -418,6 +406,9 @@ sphinx_sources = \
 	$(NULL)
 EXTRA_DIST += $(sphinx_sources)
 
+install-data-local: install-data-local-sphinx
+uninstall-local: uninstall-local-sphinx
+
 if ENABLE_DOCUMENTATION
 all: doc/_build/stamp
 
@@ -440,10 +431,21 @@ doc/_build/stamp: $(nobase_python_PYTHON) \
 maintainer-update-website: doc/_build/stamp
 	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
+
+install-data-local-sphinx: doc/_build/stamp
+	$(mkinstalldirs) $(DESTDIR)$(htmldir)
+	cp -R doc/_build/* $(DESTDIR)$(htmldir)
+
+uninstall-local-sphinx:
+	rm -fr $(DESTDIR)$(htmldir)
 else
 maintainer-update-website:
 	@echo "*** Not updating the API docs on the website - install sphinx"
 	@echo "*** and configure with --enable-api-docs"
+install-data-local-sphinx:
+	@:
+uninstall-local-sphinx:
+	@:
 endif
 
 clean-local:
