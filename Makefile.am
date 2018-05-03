@@ -410,9 +410,9 @@ install-data-local: install-data-local-sphinx
 uninstall-local: uninstall-local-sphinx
 
 if ENABLE_DOCUMENTATION
-all: doc/_build/stamp
+all: doc/_build/.stamp
 
-doc/_build/stamp: $(nobase_python_PYTHON) \
+doc/_build/.stamp: $(nobase_python_PYTHON) \
 			_dbus_bindings.la \
 			_dbus_glib_bindings.la \
 			$(sphinx_sources) \
@@ -428,11 +428,11 @@ doc/_build/stamp: $(nobase_python_PYTHON) \
 	$(PYTHON) $(srcdir)/doc/redirects.py
 	touch $@
 
-maintainer-update-website: doc/_build/stamp
+maintainer-update-website: doc/_build/.stamp
 	rsync -rtvzPp --chmod=Dg+s,ug+rwX,o=rX doc/_build/ \
 	dbus.freedesktop.org:/srv/dbus.freedesktop.org/www/doc/dbus-python/
 
-install-data-local-sphinx: doc/_build/stamp
+install-data-local-sphinx: doc/_build/.stamp
 	$(mkinstalldirs) $(DESTDIR)$(htmldir)
 	cp -R doc/_build/* $(DESTDIR)$(htmldir)
 
