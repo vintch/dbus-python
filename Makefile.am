@@ -427,7 +427,7 @@ doc/_build/.stamp: $(nobase_python_PYTHON) \
 	abs_top_srcdir='$(abs_top_srcdir)' \
 	abs_top_builddir='$(abs_top_builddir)' \
 	DBUS_PYTHON_NO_DEPRECATED=1 \
-	$(PYTHON) -m sphinx -b devhelp $(abs_top_srcdir)/doc doc/_build
+	$(PYTHON) -m sphinx -b html $(abs_top_srcdir)/doc doc/_build
 	touch $@
 
 maintainer-update-website: doc/_build/.stamp
