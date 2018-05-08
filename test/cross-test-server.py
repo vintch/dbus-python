@@ -274,15 +274,18 @@ class TestsImpl(dbus.service.Object):
 
     @dbus.service.method(INTERFACE_TESTS, 'st', '',
                          connection_keyword='conn',
+                         async_callbacks=('reply_cb', 'error_cb'),
                          **kwargs)
-    def Trigger(self, object, parameter, conn=None):
+    def Trigger(self, object, parameter, conn=None, reply_cb=None,
+                error_cb=None):
         assert isinstance(object, str)
         logger.info('method/signal: client wants me to emit Triggered(%r) from %r', parameter, object)
         tested_things.add(INTERFACE_TESTS + '.Trigger')
         gobject.idle_add(lambda: self.emit_Triggered_from(conn, object,
-                                                          parameter))
-    
-    def emit_Triggered_from(self, conn, object, parameter):
+                                                          parameter,
+                                                          reply_cb))
+
+    def emit_Triggered_from(self, conn, object, parameter, reply_cb):
         assert isinstance(object, str)
         logger.info('method/signal: Emitting Triggered(%r) from %r', parameter, object)
         obj = objects.get(object, None)
@@ -291,6 +294,8 @@ class TestsImpl(dbus.service.Object):
             objects[object] = obj
         obj.Triggered(parameter)
         logger.info('method/signal: Emitted Triggered')
+        reply_cb()
+        logger.info('method/signal: Sent reply for Tests.Trigger()')
 
     @dbus.service.method(INTERFACE_TESTS, '', '')
     def Exit(self):
