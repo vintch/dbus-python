@@ -70,8 +70,6 @@ class Client(SignalTestsImpl):
             logger.error(s)
         logger.info("asking server to Exit")
         Interface(self.obj, INTERFACE_TESTS).Exit(reply_handler=self.quit_reply_handler, error_handler=self.quit_error_handler)
-        # if the server doesn't reply we'll just exit anyway
-        gobject.timeout_add(1000, lambda: (loop.quit(), False)[1])
 
     def quit_reply_handler(self):
         logger.info("server says it will exit")
