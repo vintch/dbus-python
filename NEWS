@@ -1,7 +1,10 @@
 D-Bus Python Bindings 1.2.10 (UNRELEASED)
 =========================================
 
-...
+Fixes:
+
+• Avoid a long-standing race condition in the automated tests
+  (Debian #898158)
 
 D-Bus Python Bindings 1.2.8 (2018-05-04)
 ========================================
