@@ -26,15 +26,15 @@
 import logging
 
 try:
-    from threading import RLock
+    from threading import RLock, Event
 except ImportError:
-    from dummy_threading import RLock
+    from dummy_threading import RLock, Event
 
 import _dbus_bindings
 from dbus._expat_introspect_parser import process_introspection_data
 from dbus.exceptions import (
     DBusException, IntrospectionParserException, MissingErrorHandlerException,
-    MissingReplyHandlerException)
+    MissingReplyHandlerException, IntrospectionMissingReplyException)
 
 __docformat__ = 'restructuredtext'
 
@@ -178,10 +178,6 @@ class ProxyObject(object):
     ProxyMethodClass = _ProxyMethod
     DeferredMethodClass = _DeferredMethod
 
-    INTROSPECT_STATE_DONT_INTROSPECT = 0
-    INTROSPECT_STATE_INTROSPECT_IN_PROGRESS = 1
-    INTROSPECT_STATE_INTROSPECT_DONE = 2
-
     def __init__(self, conn=None, bus_name=None, object_path=None,
                  introspect=True, follow_name_owner_changes=False, **kwargs):
         """Initialize the proxy object.
@@ -259,9 +255,9 @@ class ProxyObject(object):
         self._introspect_lock = RLock()
 
         if not introspect or self.__dbus_object_path__ == LOCAL_PATH:
-            self._introspect_state = self.INTROSPECT_STATE_DONT_INTROSPECT
+            self._introspect_complete_event = None
         else:
-            self._introspect_state = self.INTROSPECT_STATE_INTROSPECT_IN_PROGRESS
+            self._introspect_complete_event = Event()
 
             self._pending_introspect = self._Introspect()
 
@@ -396,7 +392,7 @@ class ProxyObject(object):
                 self._introspect_error_handler(e)
                 return
 
-            self._introspect_state = self.INTROSPECT_STATE_INTROSPECT_DONE
+            self._introspect_complete_event.set()
             self._pending_introspect = None
             self._introspect_execute_queue()
         finally:
@@ -411,7 +407,7 @@ class ProxyObject(object):
         self._introspect_lock.acquire()
         try:
             _logger.debug('Executing introspect queue due to error')
-            self._introspect_state = self.INTROSPECT_STATE_DONT_INTROSPECT
+            self._introspect_complete_event.set()
             self._pending_introspect = None
             self._introspect_execute_queue()
         finally:
@@ -427,10 +423,26 @@ class ProxyObject(object):
         finally:
             self._introspect_lock.release()
 
+        # The Lock should not be acquired here
+        # Reason why we need to separately wait for reply_handler to execute
+        # is to avoid race condition, when the dbus mainloop works in other thread.
+        # References:
+        #   https://dbus.freedesktop.org/doc/api/html/structDBusPendingCall.html#ac9b0b400f7d555e4e2b3eb1e5f4c26aa
+        #     "completed: TRUE if some thread has taken responsibility for completing this pending call:
+        #      either the pending call has completed, or it is about to be completed."
+        #   https://cgit.freedesktop.org/dbus/dbus/tree/dbus/dbus-connection.c?id=91e17e7685167379ee7ebbd2d1dfc4f05b0e44b6
+        #     lines 2328 and 2332
+        # '_pending_introspect.block()' can (and sometimes does) return earlier
+        # than '_introspect_reply_handler()' execution completed. That is a race condition.
+        #
+        if self._introspect_complete_event is not None:
+            if not self._introspect_complete_event.wait(1):  # there is no default timeout. Let's use 1s
+                raise IntrospectionMissingReplyException()
+
     def _introspect_add_to_queue(self, callback, args, kwargs):
         self._introspect_lock.acquire()
         try:
-            if self._introspect_state == self.INTROSPECT_STATE_INTROSPECT_IN_PROGRESS:
+            if self._introspect_complete_event is not None and not self._introspect_complete_event.is_set():
                 self._pending_introspect_queue.append((callback, args, kwargs))
             else:
                 # someone still has a _DeferredMethod from before we
@@ -477,7 +489,7 @@ class ProxyObject(object):
         # happen is that we accidentally return a _DeferredMethod just after
         # finishing introspection, in which case _introspect_add_to_queue and
         # _introspect_block will do the right thing anyway
-        if self._introspect_state == self.INTROSPECT_STATE_INTROSPECT_IN_PROGRESS:
+        if self._introspect_complete_event is not None and not self._introspect_complete_event.is_set():
             ret = self.DeferredMethodClass(ret, self._introspect_add_to_queue,
                                            self._introspect_block)
 

@@ -60,3 +60,4 @@ Makefile
 Makefile.in
 __pycache__/
 test-service.log
+/.idea

@@ -132,3 +132,10 @@ class NameExistsException(DBusException):
 
     def __init__(self, name):
         DBusException.__init__(self, "Bus name already exists: %s"%name)
+
+class IntrospectionMissingReplyException(DBusException):
+
+    include_traceback = True
+
+    def __init__(self):
+        DBusException.__init__(self, "Introspection call was returned but the reply was not received")
