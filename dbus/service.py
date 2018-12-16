@@ -710,6 +710,9 @@ class Object(Interface):
             if parent_method._dbus_async_callbacks:
                 return
 
+            if not parent_method._dbus_return_none and retval is None and signature is None:
+                return
+
             # otherwise we send the return values in a reply. if we have a
             # signature, use it to turn the return value into a tuple as
             # appropriate

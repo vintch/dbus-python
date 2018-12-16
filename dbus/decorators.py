@@ -41,7 +41,7 @@ def method(dbus_interface, in_signature=None, out_signature=None,
            sender_keyword=None, path_keyword=None, destination_keyword=None,
            message_keyword=None, connection_keyword=None,
            byte_arrays=False,
-           rel_path_keyword=None, **kwargs):
+           rel_path_keyword=None, return_none=False, **kwargs):
     """Factory for decorators used to mark methods of a `dbus.service.Object`
     to be exported on the D-Bus.
 
@@ -151,6 +151,12 @@ def method(dbus_interface, in_signature=None, out_signature=None,
             consistent.
 
             :Since: 0.80.0
+
+        `return_none` : bool
+            If False (default), and out_signature is None, and method return
+            value is None - do not send reply (method_return).
+
+            :Since: 1.2.8_mod
     """
     validate_interface_name(dbus_interface)
 
@@ -209,6 +215,7 @@ def method(dbus_interface, in_signature=None, out_signature=None,
         func._dbus_connection_keyword = connection_keyword
         func._dbus_args = args
         func._dbus_get_args_options = dict(byte_arrays=byte_arrays)
+        func._dbus_return_none = return_none
         if is_py2:
             func._dbus_get_args_options['utf8_strings'] = kwargs.get(
                 'utf8_strings', False)
