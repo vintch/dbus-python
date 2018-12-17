@@ -41,7 +41,7 @@ def method(dbus_interface, in_signature=None, out_signature=None,
            sender_keyword=None, path_keyword=None, destination_keyword=None,
            message_keyword=None, connection_keyword=None,
            byte_arrays=False,
-           rel_path_keyword=None, return_none=False, **kwargs):
+           rel_path_keyword=None, return_none=True, **kwargs):
     """Factory for decorators used to mark methods of a `dbus.service.Object`
     to be exported on the D-Bus.
 
@@ -153,7 +153,7 @@ def method(dbus_interface, in_signature=None, out_signature=None,
             :Since: 0.80.0
 
         `return_none` : bool
-            If False (default), and out_signature is None, and method return
+            If False (default is True), and out_signature is None, and method return
             value is None - do not send reply (method_return).
 
             :Since: 1.2.8_mod
